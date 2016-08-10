@@ -38,3 +38,12 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# vscode
+.vscode
+
+# Android project building files
+android/build
+android/.idea
+android/.gradle
+android/keystores
