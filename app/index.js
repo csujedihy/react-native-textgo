@@ -9,7 +9,8 @@ import {
   StatusBar,
   UIManager,
   View,
-  Text
+  Text,
+  Alert
 } from 'react-native';
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -18,13 +19,32 @@ Parse.serverURL = "https://z.proximac.org:1337/parse";
 Parse.initialize('textgo', 'mytextgoapp');
 
 class App extends Component {
+  
+  constructor() {
+    super();
+    this.state = {currentUser: null};
+  }
+  
+  componentDidMount() {
+    Parse.User.currentAsync()
+    .then((currentUser)=>{
+        if (currentUser) {
+            Alert.alert('', JSON.stringify(currentUser));
+            this.setState({currentUser: currentUser});
+        }
+    });
+  }
+
   render() {
-    return (
-      <View style={styles.container} >
-        <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-        <Text>HELLO!!</Text>
-      </View>
-    );
+    if (this.state.currentUser)
+      return (<Text>Logged in</Text>);
+    else
+      return (
+        <View style={styles.container} >
+          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+          <Text>Not logged in</Text>
+        </View>
+      );
   }
 }
 
