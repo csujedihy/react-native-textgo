@@ -64,8 +64,7 @@ export default class User extends Component {
 						}}
 						style={styles.signButton}					
 						>
-						<Text pointerEvents="none"
-									style={{color: 'white', fontWeight: 'bold',}}>
+						<Text pointerEvents="none">
 							SIGN IN
 						</Text>
 					</MKButton>
@@ -81,8 +80,7 @@ export default class User extends Component {
 						}}
 						style={styles.signButton}
 						>
-						<Text style={styles.buttonText} pointerEvents="none"
-									style={{color: 'white', fontWeight: 'bold',}}>
+						<Text style={styles.buttonText} pointerEvents="none">
 							SIGN UP
 						</Text>
 					</MKButton>
