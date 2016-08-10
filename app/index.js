@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
+import Main from './Components/main';
 
 import {
   StyleSheet,
@@ -37,7 +38,12 @@ class App extends Component {
 
   render() {
     if (this.state.currentUser)
-      return (<Text>Logged in</Text>);
+      return (
+          <View style={styles.container} >
+            <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+            <Main/>
+          </View>
+      );
     else
       return (
         <View style={styles.container} >

@@ -3,6 +3,9 @@ logs
 *.log
 npm-debug.log*
 
+# ios/build
+ios/build/*
+
 # Runtime data
 pids
 *.pid
