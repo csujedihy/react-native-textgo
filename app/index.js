@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
+import User from './User';
 
 import {
   StyleSheet,
@@ -48,7 +49,7 @@ class App extends Component {
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <Text>Not logged in</Text>
+          <User/>
         </View>
       );
   }
