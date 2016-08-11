@@ -12,6 +12,7 @@
     "react": "15.2.1",
     "react-native": "0.31.0",
     "react-native-material-kit": "^0.3.2",
-    "undefined": "^0.1.0"
+    "undefined": "^0.1.0",
+    "react-native-md-textinput": ">=2.0.4"
   }
 }

@@ -3,6 +3,9 @@
 import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
+import TextField from 'react-native-md-textinput';
+import Button from 'apsl-react-native-button'
+import SignUp from './signup'
 
 import {
   StyleSheet,
@@ -29,12 +32,19 @@ const CARD_HEIGHT = Dimensions.get('window').height - 50;
 
 
 export default class User extends Component {
+	constructor() {
+		super();
+		this.state = {signupModalVisible: false}
+	}
+
   render() {
+		console.log('index render()' + this.state.signupModalVisible);
     let pic = {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
     };
     return (
 			<View style={styles.main}>
+				<SignUp visible={this.state.signupModalVisible}/>
 				<View style={styles.topView}>
 					<ScrollView 
 						style={styles.scrollView} 
@@ -53,37 +63,21 @@ export default class User extends Component {
 					</ScrollView>
 				</View>
 				<View style={styles.bottomView}>
-					<MKButton
-						backgroundColor={MKColor.Teal}
-						shadowRadius={2}
-						shadowOffset={{width:0, height:2}}
-						shadowOpacity={.7}
-						shadowColor="black"
-						onPress={() => {
-							Alert.alert('hi, raised button!');
-						}}
-						style={styles.signButton}					
-						>
-						<Text pointerEvents="none">
-							SIGN IN
-						</Text>
-					</MKButton>
-					
-					<MKButton
-						backgroundColor={MKColor.Teal}
-						shadowRadius={2}
-						shadowOffset={{width:0, height:2}}
-						shadowOpacity={.7}
-						shadowColor="black"
-						onPress={() => {
-							Alert.alert('hi, raised button!');
-						}}
-						style={styles.signButton}
-						>
-						<Text style={styles.buttonText} pointerEvents="none">
-							SIGN UP
-						</Text>
-					</MKButton>
+        <Button
+          style={styles.buttonStyle} textStyle={styles.textStyle}
+          onPress={() => {
+            console.log('world!')
+          }}>
+          SIGN IN
+        </Button>
+				<Button
+          style={styles.buttonStyle} textStyle={styles.textStyle}
+          onPress={() => {
+            this.setState({signupModalVisible:true});
+						console.log(this.state.signupModalVisible);
+          }}>
+          SIGN UP
+        </Button>
 				</View>
 			</View>
 
@@ -135,6 +129,19 @@ const styles = StyleSheet.create({
 	},
 	buttonText: {
 		textAlign: 'center',
-	}
-
+	},
+  buttonStyle: {
+    backgroundColor: '#196EEF',
+    borderColor: '#196EEF',
+    borderWidth: 2,
+    borderRadius: 10,
+		margin: 10,
+		padding: 10,
+		alignItems: 'center',
+		justifyContent: 'center',
+		flex: 1,
+  },
+	textStyle: {
+    color: 'white'
+  },
 });
