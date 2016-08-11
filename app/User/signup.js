@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
+import Button from 'apsl-react-native-button'
 
 
 import {
@@ -35,8 +36,19 @@ export default class SignUp extends Component {
           visible={this.props.visible}>
           <View style={styles.container}>
             <ScrollView>
-              <TextField label={'Email'} highlightColor={'#00BCD4'} />
-              <TextField label={'Password'} highlightColor={'#00BCD4'} />
+              <View style={styles.componentsContainer}>
+                <TextField label={'Email'} highlightColor={'#00BCD4'} />
+                <TextField label={'Password'} highlightColor={'#00BCD4'} />
+                <Button
+                  style={styles.buttonStyle} textStyle={styles.textStyle}
+                  onPress={() => {
+                    this.setState({signupModalVisible:true});
+                    console.log(this.state.signupModalVisible);
+                  }}>
+                  SIGN UP
+                </Button>
+              </View>
+
             </ScrollView>
           </View>
         </Modal>
@@ -46,8 +58,22 @@ export default class SignUp extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 22,
+    // marginTop: 22,
     flex: 1,
     flexDirection: 'column'
-  }
+  },
+  componentsContainer: {
+    margin: 20
+  },
+  buttonStyle: {
+    backgroundColor: '#196EEF',
+    borderColor: '#196EEF',
+    borderWidth: 2,
+    borderRadius: 10,
+		margin: 10,
+		padding: 10,
+		alignItems: 'center',
+		justifyContent: 'center',
+		flex: 1,
+  },
 });
