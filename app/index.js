@@ -40,6 +40,7 @@ class App extends Component {
     });
   }
 
+  /*
   render() {
     if (this.state.currentUser)
       return (
@@ -52,11 +53,41 @@ class App extends Component {
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <Main/>
+          <User/>
         </View>
       );
   }
 }
+*/
+
+render() {
+    return (
+      <Navigator
+        initialRoute={{ title: 'My Initial Scene', index: 0 }}
+        renderScene={(route, navigator) =>
+          <MyScene
+            title={route.title}
+
+            // Function to call when a new scene should be displayed           
+            onForward={ () => {    
+              const nextIndex = route.index + 1;
+              navigator.push({
+                title: 'Scene ' + nextIndex,
+                index: nextIndex,
+              });
+            }}
+
+            // Function to call to go back to the previous scene
+            onBack={() => {
+              if (route.index > 0) {
+                navigator.pop();
+              }
+            }}
+          />
+        }
+      />
+    )
+  }
 
 const styles = StyleSheet.create({
   container: {
