@@ -52,7 +52,7 @@ class App extends Component {
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <User/>
+          <Main/>
         </View>
       );
   }
