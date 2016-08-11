@@ -47,3 +47,7 @@ android/build
 android/.idea
 android/.gradle
 android/keystores
+android/app
+
+# Android SDK path
+android/local.properties

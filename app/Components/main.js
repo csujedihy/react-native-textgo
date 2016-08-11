@@ -169,4 +169,42 @@ class Main extends Component {
 	*/
 }
 
+var styles = StyleSheet.create({
+    rowContainer:{
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    rowCount: {
+        fontSize: 20,
+        textAlign: 'right',
+        color: 'gray',
+        margin: 10,
+        marginLeft: 15,
+    },
+    rowDetailsContainer: {
+        flex: 1,
+    },
+    rowTitle: {
+        fontSize: 15,
+        textAlign: 'left',
+        marginTop: 10,
+        marginBottom: 4,
+        marginRight: 10,
+        color: '#FF6600'
+    },
+    rowDetailsLine: {
+        fontSize: 12,
+        marginBottom: 10,
+        color: 'gray',
+    },
+    listview: {
+      marginBottom:49
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#CCCCCC'
+    } 
+});
+
 export default Main;
