@@ -5,7 +5,7 @@ import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button'
-
+import Users from '../Model/users';
 
 import {
   StyleSheet,
@@ -22,28 +22,40 @@ export default class SignUp extends Component {
   constructor(props) {
     super(props);
     console.log('SignUp Constructor' + props.visible);
-    this.state = {modalVisible: this.props.visible};
+    this.state = {
+      modalVisible: this.props.visible,
+      username: "",
+      password: ""
+    };
   }
   componentDidMount() {
     this.setState({modalVisible: this.props.visible});
   }
+
+
+
   render() {
     console.log('Modal render()' + this.props.visible);
+    let username = "";
+    let password = "";
     return (
         <Modal
           animationType={"slide"}
           transparent={false}
-          visible={this.props.visible}>
+          visible={this.props.visible}
+          onRequestClose={() => {alert("Modal has been closed.")}}>
           <View style={styles.container}>
             <ScrollView>
               <View style={styles.componentsContainer}>
-                <TextField label={'Email'} highlightColor={'#00BCD4'} />
-                <TextField label={'Password'} highlightColor={'#00BCD4'} />
+                <TextField label={'Email'} highlightColor={'#00BCD4'} onChangeText={(text)=>{username=text}}/>
+                <TextField label={'Password'} highlightColor={'#00BCD4'} onChangeText={(text)=>{password=text}}/>
                 <Button
                   style={styles.buttonStyle} textStyle={styles.textStyle}
                   onPress={() => {
-                    this.setState({signupModalVisible:true});
-                    console.log(this.state.signupModalVisible);
+                    alert("Try to sign up.");
+                    console.log(username);
+                    console.log(password);
+                    Users.signUp(username, password, null);
                   }}>
                   SIGN UP
                 </Button>
