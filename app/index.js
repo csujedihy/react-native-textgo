@@ -8,6 +8,15 @@ import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
 import User from './User';
+import AV from 'leancloud-storage';
+
+const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
+const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
+AV.init({
+  appId,
+  appKey,
+  region: 'us',
+});
 
 import {
   StyleSheet,
@@ -15,13 +24,11 @@ import {
   UIManager,
   View,
   Text,
-  Alert
+  Alert,
+  Navigator,
 } from 'react-native';
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
-
-Parse.serverURL = "https://z.proximac.org:1337/parse";
-Parse.initialize('textgo', 'mytextgoapp');
 
 class App extends Component {
   
@@ -31,8 +38,13 @@ class App extends Component {
   }
   
   componentDidMount() {
-    Parse.User.currentAsync()
-    .then((currentUser)=>{
+    // AV.User.logOut().then(()=>{
+    //   console.log('LogOut OK');
+    //   this.setState({currentUser: null})
+    // }, (err)=>{
+    //   console.log(err.message);
+    // });
+    AV.User.currentAsync().then((currentUser)=>{
         if (currentUser) {
             Alert.alert('', JSON.stringify(currentUser));
             this.setState({currentUser: currentUser});
@@ -40,53 +52,22 @@ class App extends Component {
     });
   }
 
-  /*
-  render() {
-    if (this.state.currentUser)
-      return (
+    render() {
+      if (this.state.currentUser)
+        return (
+            <View style={styles.container} >
+              <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+              <Main/>
+            </View>
+        );
+      else
+        return (
           <View style={styles.container} >
             <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-            <Main/>
+            <User/>
           </View>
-      );
-    else
-      return (
-        <View style={styles.container} >
-          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <User/>
-        </View>
-      );
-  }
-}
-*/
-
-render() {
-    return (
-      <Navigator
-        initialRoute={{ title: 'My Initial Scene', index: 0 }}
-        renderScene={(route, navigator) =>
-          <MyScene
-            title={route.title}
-
-            // Function to call when a new scene should be displayed           
-            onForward={ () => {    
-              const nextIndex = route.index + 1;
-              navigator.push({
-                title: 'Scene ' + nextIndex,
-                index: nextIndex,
-              });
-            }}
-
-            // Function to call to go back to the previous scene
-            onBack={() => {
-              if (route.index > 0) {
-                navigator.pop();
-              }
-            }}
-          />
-        }
-      />
-    )
+        );
+    }
   }
 
 const styles = StyleSheet.create({

@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
-import Button from 'apsl-react-native-button'
+import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
 
 import {
@@ -24,20 +24,17 @@ export default class SignUp extends Component {
     console.log('SignUp Constructor' + props.visible);
     this.state = {
       modalVisible: this.props.visible,
-      username: "",
-      password: ""
     };
   }
+
   componentDidMount() {
     this.setState({modalVisible: this.props.visible});
   }
 
-
-
   render() {
     console.log('Modal render()' + this.props.visible);
-    let username = "";
-    let password = "";
+    var username = "";
+    var password = "";
     return (
         <Modal
           animationType={"slide"}
@@ -52,12 +49,23 @@ export default class SignUp extends Component {
                 <Button
                   style={styles.buttonStyle} textStyle={styles.textStyle}
                   onPress={() => {
-                    alert("Try to sign up.");
                     console.log(username);
                     console.log(password);
-                    Users.signUp(username, password, null);
+                    Users.signUp(username, password, (err)=>{
+                      if (err)
+                        alert(err.message);
+                      else
+                        alert('Sign up successfully!')
+                    });
                   }}>
                   SIGN UP
+                </Button>
+                <Button
+                  style={styles.buttonStyle} textStyle={styles.textStyle}
+                  onPress={() => {
+                    
+                  }}>
+                  CLOSE
                 </Button>
               </View>
 
