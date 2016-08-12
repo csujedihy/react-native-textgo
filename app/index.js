@@ -3,7 +3,7 @@
 */
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
@@ -15,7 +15,9 @@ import {
   UIManager,
   View,
   Text,
-  Alert
+  Alert,
+  Navigator,
+  TouchableHighlight
 } from 'react-native';
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -34,13 +36,12 @@ class App extends Component {
     Parse.User.currentAsync()
     .then((currentUser)=>{
         if (currentUser) {
-            Alert.alert('', JSON.stringify(currentUser));
+            //Alert.alert('', JSON.stringify(currentUser));
             this.setState({currentUser: currentUser});
         }
     });
   }
 
-  /*
   render() {
     if (this.state.currentUser)
       return (
@@ -53,41 +54,11 @@ class App extends Component {
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <User/>
+          <Main/>
         </View>
       );
   }
 }
-*/
-
-render() {
-    return (
-      <Navigator
-        initialRoute={{ title: 'My Initial Scene', index: 0 }}
-        renderScene={(route, navigator) =>
-          <MyScene
-            title={route.title}
-
-            // Function to call when a new scene should be displayed           
-            onForward={ () => {    
-              const nextIndex = route.index + 1;
-              navigator.push({
-                title: 'Scene ' + nextIndex,
-                index: nextIndex,
-              });
-            }}
-
-            // Function to call to go back to the previous scene
-            onBack={() => {
-              if (route.index > 0) {
-                navigator.pop();
-              }
-            }}
-          />
-        }
-      />
-    )
-  }
 
 const styles = StyleSheet.create({
   container: {

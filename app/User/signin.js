@@ -16,7 +16,26 @@ import {
 export default class SignIn extends Component {
   render() {
     return (
-            
+        <View>
+        <Text>
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        Hello, I'm sign in.asdfj;kasdfa;sdfa;sdfjas;dfaj;sdflasdfasdfasdfasdf
+        </Text>
+
+        </View>
     );
   }
 }

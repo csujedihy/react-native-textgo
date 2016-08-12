@@ -15,10 +15,12 @@ import {
   Text,
   ListView,
   TouchableHighlight,
+  Navigator,
 } from 'react-native';
 
 import TabBar from '../Components/TabBar';
 import Contacts from 'react-native-contacts';
+import Communications from 'react-native-communications';
 
 var allContacts;
 /*
@@ -35,16 +37,16 @@ Contacts.getAll((err, contacts) => {
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});  
 allContacts =  ds.cloneWithRows([{	
 			recordID: 1,
-  			familyName: "Jung",
-  			givenName: "Carl",
+  			familyName: "Huang",
+  			givenName: "Yi",
   			middleName: "",
   			emailAddresses: [{
     			label: "work",
-    			email: "carl-jung@example.com",
+    			email: "yihuang@email.tamu.edu",
   			}],
   			phoneNumbers: [{
     			label: "mobile",
-    			number: "(555) 555-5555",
+    			number: "(469) 236-7525",
   			}],
   			thumbnailPath: "",
 		}]);
@@ -67,12 +69,56 @@ class Main extends Component {
 			</View>
 		);
 	}
+  
+	render() {
+        return(
+            <Navigator
+            style={styles.container}
+            tintColor='#FF6600'
+            initialRoute={{id: 'Dashboard'}}
+            renderScene={(route, navigator) => this.navigatorRenderScene(route, navigator)}/>
+        );
+    }
 
-
-  renderListViewRow(row, pushNavBarTitle){
+    navigatorRenderScene(route, navigator){
+        switch(route.id){
+            default:
+            case 'Dashboard':
+                return (
+                    <TabBar structure={[{
+                            title: 'Contacts',
+                            iconName: 'user',
+                            renderContent: () => {return(
+                            	<ListView
+                            		dataSource={allContacts}
+                            		renderRow={(row, route, navigator)=>this.renderListViewRow(row, 'Contacts', route, navigator)}
+								/>
+                            );}
+                          },
+                          {
+                            title: 'Keypad',
+                            iconName: 'phone',
+							renderContent: () => {return(
+                            	<ListView
+                            		dataSource={allContacts}
+                            		renderRow={(row, route, navigator)=>this.renderListViewRow(row, 'Keypad', route, navigator)}
+								/>
+                            );}
+                          }
+                          ]}
+                    selectedTab={2}
+                    activeTintColor={'#ff8533'}
+                    iconSize={25}
+			        />
+                );
+        }  
+    }
+        
+  
+  renderListViewRow(row, pushNavBarTitle, route, navigator){
       return(
           <TouchableHighlight underlayColor={'#f3f3f2'}
-                              onPress={()=>this.selectRow(row, pushNavBarTitle)}>
+                              onPress={()=>this.selectRow(row, pushNavBarTitle, route, navigator)}>
             <View style={styles.rowContainer}>
                 <Text style={styles.rowCount}>
                     {row.count}
@@ -99,77 +145,18 @@ class Main extends Component {
           </TouchableHighlight>
       );
   }
-	
-  
-	render() {
-      return(
-      <TabBar structure={[{
-                            title: 'Contacts',
-                            iconName: 'user',
-                            renderContent: () => {return(
-                            	<ListView
-                            		dataSource={allContacts}
-                            		renderRow={(row)=>this.renderListViewRow(row, 'Ask Story')}
-								/>
-                            );}
-                          },
-                          {
-                            title: 'Keypad',
-                            iconName: 'phone',
-							renderContent: () => {return(
-                            	<ListView
-                            		dataSource={allContacts}
-                            		renderRow={(row)=>this.renderListViewRow(row, 'Ask Story')}
-								/>
-                            );}
-                          }
-                          ]}
-              selectedTab={2}
-              activeTintColor={'#ff8533'}
-              iconSize={25}
-			  />
-    );
+
+selectRow(row, pushNavBarTitle, route, navigator){
+    return Communications.phonecall(row.phoneNumbers[0].number, true);
   }
-  
 
-/* 
-    render() {
-        return (
-					<TabBarIOS
-						unselectedTintColor="yellow"
-						tintColor="white"
-						barTintColor="darkslateblue">
-
-						<TabBarIOS.Item
-							title="Messages"
-							selected={this.state.selectedTab === 'redTab'}
-							onPress={() => {
-								this.setState({
-									selectedTab: 'redTab',
-								});
-							}}>
-							{this._renderContent('Red Tab')}
-						</TabBarIOS.Item>
-
-						<TabBarIOS.Item
-							renderAsOriginal
-							title="Dial"
-							selected={this.state.selectedTab === 'greenTab'}
-							onPress={() => {
-								this.setState({
-									selectedTab: 'greenTab',
-								});
-							}}>
-							{this._renderContent('Green Tab')}
-						</TabBarIOS.Item>
-					</TabBarIOS>
-					
-				);
-    }
-	*/
 }
 
 var styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#F6F6EF',
+    },
     rowContainer:{
         flex: 1,
         flexDirection: 'row',
