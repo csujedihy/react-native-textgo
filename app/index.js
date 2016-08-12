@@ -49,12 +49,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // AV.User.logOut().then(()=>{
-    //   console.log('LogOut OK');
-    //   this.setState({currentUser: null})
-    // }, (err)=>{
-    //   console.log(err.message);
-    // });
+    AV.User.logOut().then(()=>{
+      console.log('LogOut OK');
+      this.setState({currentUser: null})
+    }, (err)=>{
+      console.log(err.message);
+    });
     this._setCurrentUser();
   }
 
@@ -70,7 +70,7 @@ class App extends Component {
         return (
           <View style={styles.container} >
             <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-            <User setUserCallback={this._setCurrentUser}/>
+            <User setUserCallback={this._setCurrentUser.bind(this)}/>
           </View>
         );
     }
