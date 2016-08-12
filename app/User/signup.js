@@ -31,6 +31,11 @@ export default class SignUp extends Component {
     this.setState({modalVisible: this.props.visible});
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({modalVisible: nextProps.visible});
+
+  }
+
   render() {
     console.log('Modal render()' + this.props.visible);
     var username = "";
@@ -39,7 +44,7 @@ export default class SignUp extends Component {
         <Modal
           animationType={"slide"}
           transparent={false}
-          visible={this.props.visible}
+          visible={this.state.modalVisible}
           onRequestClose={() => {alert("Modal has been closed.")}}>
           <View style={styles.container}>
             <ScrollView>
@@ -54,8 +59,11 @@ export default class SignUp extends Component {
                     Users.signUp(username, password, (err)=>{
                       if (err)
                         alert(err.message);
-                      else
-                        alert('Sign up successfully!')
+                      else {
+                        this.setState({modalVisible: false});
+                        alert('Sign up successfully!');
+                        this.props.setUserCallback();
+                      }
                     });
                   }}>
                   SIGN UP
@@ -63,7 +71,7 @@ export default class SignUp extends Component {
                 <Button
                   style={styles.buttonStyle} textStyle={styles.textStyle}
                   onPress={() => {
-                    
+                    this.setState({modalVisible: false});
                   }}>
                   CLOSE
                 </Button>

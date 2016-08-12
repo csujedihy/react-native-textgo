@@ -37,6 +37,17 @@ class App extends Component {
     this.state = {currentUser: null};
   }
   
+  _setCurrentUser() {
+    AV.User.currentAsync().then((currentUser)=>{
+        if (currentUser) {
+            // Alert.alert('', JSON.stringify(currentUser));
+            console.log('Has currentUser');
+            // FIXME: maybe there is a 'this' trap
+            this.setState({currentUser: currentUser});
+        }
+    });
+  }
+
   componentDidMount() {
     // AV.User.logOut().then(()=>{
     //   console.log('LogOut OK');
@@ -44,15 +55,10 @@ class App extends Component {
     // }, (err)=>{
     //   console.log(err.message);
     // });
-    AV.User.currentAsync().then((currentUser)=>{
-        if (currentUser) {
-            Alert.alert('', JSON.stringify(currentUser));
-            this.setState({currentUser: currentUser});
-        }
-    });
+    this._setCurrentUser();
   }
 
-    render() {
+  render() {
       if (this.state.currentUser)
         return (
             <View style={styles.container} >
@@ -64,7 +70,7 @@ class App extends Component {
         return (
           <View style={styles.container} >
             <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-            <User/>
+            <User setUserCallback={this._setCurrentUser}/>
           </View>
         );
     }

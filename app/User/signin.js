@@ -6,6 +6,8 @@ import ParseReact from 'parse-react/react-native';
 
 import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button';
+import Users from '../Model/users';
+
 
 import {
   StyleSheet,
@@ -13,14 +15,38 @@ import {
   UIManager,
   View,
   Text,
-  Alert
+  Alert,
+  Modal,
+  ScrollView
 } from 'react-native';
 
 export default class SignIn extends Component {
+  constructor(props) {
+    super(props);
+    console.log('SignIn Constructor ' + props.visible);
+    this.state = {
+      modalVisible: this.props.visible,
+    };
+  }
+
+  componentDidMount() {
+    this.setState({modalVisible: this.props.visible});
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({modalVisible: nextProps.visible});
+  }
+
   render() {
+    console.log('Modal render() ' + this.props.visible);
     var username = "";
     var password = "";
     return (
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {alert("Modal has been closed.")}}>
           <View style={styles.container}>
             <ScrollView>
               <View style={styles.componentsContainer}>
@@ -34,17 +60,27 @@ export default class SignIn extends Component {
                     Users.signIn(username, password, (err)=>{
                       if (err)
                         alert(err.message);
-                      else
-                        console.log('Sign up successfully!');
+                      else {
+                        alert('Sign up successfully!')
+                        this.setState({modalVisible: false});
+                      }
                     });
                   }}>
-                  LOG IN
+                  SIGN UP
+                </Button>
+                <Button
+                  style={styles.buttonStyle} textStyle={styles.textStyle}
+                  onPress={() => {
+                    this.setState({modalVisible: false});
+                  }}>
+                  CLOSE
                 </Button>
               </View>
 
             </ScrollView>
-          </View>    
-          );
+          </View>
+        </Modal>
+    );
   }
 }
 

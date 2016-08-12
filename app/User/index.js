@@ -4,8 +4,9 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
-import Button from 'apsl-react-native-button'
-import SignUp from './signup'
+import Button from 'apsl-react-native-button';
+import SignUp from './signup';
+import SignIn from './signin';
 
 import {
   StyleSheet,
@@ -44,7 +45,8 @@ export default class User extends Component {
     };
     return (
 			<View style={styles.main}>
-				<SignUp visible={this.state.signupModalVisible}/>
+				<SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
+				<SignIn visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
 				<View style={styles.topView}>
 					<ScrollView 
 						style={styles.scrollView} 
