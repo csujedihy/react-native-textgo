@@ -8,6 +8,15 @@ import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
 import User from './User';
+import AV from 'leancloud-storage';
+
+const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
+const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
+AV.init({
+  appId,
+  appKey,
+  region: 'us',
+});
 
 import {
   StyleSheet,
@@ -22,9 +31,6 @@ import {
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
-Parse.serverURL = "https://z.proximac.org:1337/parse";
-Parse.initialize('textgo', 'mytextgoapp');
-
 class App extends Component {
   
   constructor() {
@@ -32,33 +38,45 @@ class App extends Component {
     this.state = {currentUser: null};
   }
   
-  componentDidMount() {
-    Parse.User.currentAsync()
-    .then((currentUser)=>{
+  _setCurrentUser() {
+    AV.User.currentAsync().then((currentUser)=>{
         if (currentUser) {
-            //Alert.alert('', JSON.stringify(currentUser));
+            // Alert.alert('', JSON.stringify(currentUser));
+            console.log('Has currentUser');
+            // FIXME: maybe there is a 'this' trap
             this.setState({currentUser: currentUser});
         }
     });
   }
 
+
+  componentDidMount() {
+    AV.User.logOut().then(()=>{
+      console.log('LogOut OK');
+      this.setState({currentUser: null})
+    }, (err)=>{
+      console.log(err.message);
+    });
+    this._setCurrentUser();
+  }
+
   render() {
-    if (this.state.currentUser)
-      return (
+      if (this.state.currentUser)
+        return (
+            <View style={styles.container} >
+              <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+              <Main/>
+            </View>
+        );
+      else
+        return (
           <View style={styles.container} >
             <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-            <Main/>
+            <User setUserCallback={this._setCurrentUser.bind(this)}/>
           </View>
-      );
-    else
-      return (
-        <View style={styles.container} >
-          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <Main/>
-        </View>
-      );
+        );
+    }
   }
-}
 
 const styles = StyleSheet.create({
   container: {

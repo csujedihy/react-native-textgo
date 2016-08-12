@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
-import Button from 'apsl-react-native-button'
+import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
 
 import {
@@ -24,25 +24,27 @@ export default class SignUp extends Component {
     console.log('SignUp Constructor' + props.visible);
     this.state = {
       modalVisible: this.props.visible,
-      username: "",
-      password: ""
     };
   }
+
   componentDidMount() {
     this.setState({modalVisible: this.props.visible});
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({modalVisible: nextProps.visible});
 
+  }
 
   render() {
     console.log('Modal render()' + this.props.visible);
-    let username = "";
-    let password = "";
+    var username = "";
+    var password = "";
     return (
         <Modal
           animationType={"slide"}
           transparent={false}
-          visible={this.props.visible}
+          visible={this.state.modalVisible}
           onRequestClose={() => {alert("Modal has been closed.")}}>
           <View style={styles.container}>
             <ScrollView>
@@ -52,12 +54,26 @@ export default class SignUp extends Component {
                 <Button
                   style={styles.buttonStyle} textStyle={styles.textStyle}
                   onPress={() => {
-                    alert("Try to sign up.");
                     console.log(username);
                     console.log(password);
-                    Users.signUp(username, password, null);
+                    Users.signUp(username, password, (err)=>{
+                      if (err)
+                        alert(err.message);
+                      else {
+                        this.setState({modalVisible: false});
+                        alert('Sign up successfully!');
+                        this.props.setUserCallback();
+                      }
+                    });
                   }}>
                   SIGN UP
+                </Button>
+                <Button
+                  style={styles.buttonStyle} textStyle={styles.textStyle}
+                  onPress={() => {
+                    this.setState({modalVisible: false});
+                  }}>
+                  CLOSE
                 </Button>
               </View>
 
