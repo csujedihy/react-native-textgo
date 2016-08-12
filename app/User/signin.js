@@ -31,19 +31,20 @@ export default class SignIn extends Component {
                   onPress={() => {
                     console.log(username);
                     console.log(password);
-                    Users.signUp(username, password, (err)=>{
+                    Users.signIn(username, password, (err)=>{
                       if (err)
                         alert(err.message);
                       else
-                        alert('Sign up successfully!')
+                        console.log('Sign up successfully!');
                     });
                   }}>
-                  SIGN UP
+                  LOG IN
                 </Button>
               </View>
 
             </ScrollView>
-          </View>    );
+          </View>    
+          );
   }
 }
 
