@@ -9,12 +9,12 @@ import SignUp from './signup'
 import SignIn from './signin'
 
 import {
-  StyleSheet,
-  StatusBar,
-  UIManager,
-  View,
-  Text,
-  Alert,
+	StyleSheet,
+	StatusBar,
+	UIManager,
+	View,
+	Text,
+	Alert,
 	ScrollView,
 	Image,
 	Dimensions,
