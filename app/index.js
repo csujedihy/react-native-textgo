@@ -39,7 +39,7 @@ class App extends Component {
 		this.state = {currentUser: null};
 	}
 
-	_setCurrentUser() {
+	setCurrentUser() {
 		AV.User.currentAsync().then((currentUser)=>{
 				if (currentUser) {
 						// Alert.alert('', JSON.stringify(currentUser));
@@ -52,8 +52,7 @@ class App extends Component {
 
 
 	componentDidMount() {
-		Users.signOut();
-		this._setCurrentUser();
+		this.setCurrentUser();
 	}
 
 	render() {
@@ -68,7 +67,7 @@ class App extends Component {
 				return (
 					<View style={styles.container} >
 						<StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-						<User setUserCallback={this._setCurrentUser.bind(this)}/>
+						<User setUserCallback={this.setCurrentUser.bind(this)}/>
 					</View>
 				);
 		}

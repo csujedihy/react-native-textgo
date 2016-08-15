@@ -6,6 +6,7 @@ import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
 import MyNavigationBar from '../Components/MyNavigationBar';
 import phoneFormat from "phoneformat-react-native";
+import Main from '../Components/main';
 
 import {
   StyleSheet,
@@ -21,10 +22,37 @@ import {
 export default class SignUpMobileVerify extends Component {
   constructor(props) {
 		super(props);
+		this.smsCode = "";
+		this.d1 = "";
+		this.d2 = "";
+		this.d3 = "";
+		this.d4 = "";
+	}
+
+	componentDidMount() {
+		let mobile = '1' + this.props.mobile;
+		Users.smsVerification(mobile, (err, result)=> {
+			if (err) {
+				this.props.navigator.pop();
+			} else {
+				this.smsCode = result;
+			}
+		});
 	}
 
   rightButtonHandler() {
 
+		let smsInput = this.d1 + this.d2 + this.d3 + this.d4;
+		if (smsInput == this.smsCode) {
+			this.props.navigator.push({
+				component: Main,
+			});
+		} else {
+			alert('Wrong verification code');
+			let digitInputs = [this.refs.d1, this.refs.d2, this.refs.d3, this.refs.d4];
+			digitInputs.map((e, i)=>{e.clear()});
+			this.refs.d1.focus();
+		}
 	}
 
 	render() {
@@ -42,13 +70,38 @@ export default class SignUpMobileVerify extends Component {
 					title={titleConfig}
 					rightButton={rightButtonConfig} />
 				<ScrollView keyboardShouldPersistTaps={true}>
-					<View style={styles.contentContainer}>
-						<TextInput style={styles.codeInput} maxLength={1}></TextInput>
-						<TextInput style={styles.codeInput} maxLength={1}></TextInput>
-						<TextInput style={styles.codeInput} maxLength={1}></TextInput>
-						<TextInput style={styles.codeInput} maxLength={1}></TextInput>
+					<View style={styles.textContainer}>
+						<Text>You will receive the verification code in a SMS message.</Text>
 					</View>
 
+					<View style={styles.codeContainer}>
+						<View style={styles.codeInputWrapper}>						
+							<TextInput style={styles.codeInput} ref={"d1"} maxLength={1} onChangeText={(text)=>{
+								this.d1 = text;
+								this.refs.d2.focus()}
+							}></TextInput>
+						</View>
+						<View style={styles.codeInputWrapper}>						
+							<TextInput style={styles.codeInput} ref={"d2"} maxLength={1} onChangeText={(text)=>{
+								this.d2 = text;
+								this.refs.d3.focus()}
+							}></TextInput>
+						</View>
+						<View style={styles.codeInputWrapper}>						
+							<TextInput style={styles.codeInput} ref={"d3"} maxLength={1} onChangeText={(text)=>{
+								this.d3 = text;
+								this.refs.d4.focus()}
+							}></TextInput>
+						</View>
+						<View style={styles.codeInputWrapper}>						
+							<TextInput style={styles.codeInput} ref={"d4"} maxLength={1} onChangeText={(text)=>{
+								this.d4 = text;
+								this.rightButtonHandler();
+								}
+							}></TextInput>					
+						</View>
+
+					</View>
 				</ScrollView>
 			</View>
 		);
@@ -60,22 +113,33 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
   },
-	contentContainer: {
+	textContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		alignItems: 'flex-end',
+		padding: 5
+	},
+	codeContainer: {
 		flex: 1, 
-		marginTop: 200,
-		alignItems: 'center', 
+		alignItems: 'flex-start', 
 		flexDirection: 'row',
 		justifyContent: 'center'
+	},
+	codeInputWrapper: {
+		height: 50,
+		width: 50,
+		borderWidth: 1,
+		borderColor: '#525357',
+		borderRadius: 2,
+		margin: 10,
 	},
 	codeInput: {
 		height: 50,
 		width: 50,
-		borderWidth: 1,
 		fontSize: 42,
 		borderColor: '#525357',
 		borderRadius: 2,
-		margin: 10,
-		paddingLeft: 12
+		paddingLeft: 12,
 	},
   componentsContainer: {
     margin: 20
@@ -90,5 +154,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		flex: 1,
-  },
+  }
 });

@@ -1,8 +1,6 @@
 'use strict';
 
 import React, { Component } from 'react';
-import Parse from 'parse/react-native';
-import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button'
 import SignUp from './signup'
@@ -37,7 +35,10 @@ const CARD_HEIGHT = Dimensions.get('window').height - 50;
 export default class User extends Component {
   constructor() {
     super();
-    this.state = {signupModalVisible: false}
+    this.state = {
+      signupModalVisible: false,
+      signinModalVisible: false
+    }
   }
 
   render() {
@@ -45,34 +46,11 @@ export default class User extends Component {
     let pic = {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
     };
-    const routes = [
-      {title: 'TextGo', index: 0 },
-      {title: 'Sign In', index: 1 },
-      {title: 'Sign Up', index: 2 },
-    ];
     
     return (
-      <Navigator
-      initialRoute={routes[0]}
-      renderScene={(route, navigator) =>{
-        if(route.index === 2){
-          return (
-            <SignUp {...route.props} navigator={navigator} route={route}/>
-          );
-        }
-        
-        if(route.index === 1){
-          return (
-            <SignIn {...route.props} navigator={navigator} route={route}/>
-          );
-        }
-      
-        if(route.index === 0){
-          return(
-        
       <View style={styles.main}>
         <SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
-        <SignIn visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
+        <SignIn visible={this.state.signinModalVisible} setUserCallback={this.props.setUserCallback}/>
         <View style={styles.topView}>
           <ScrollView 
             style={styles.scrollView} 
@@ -92,10 +70,9 @@ export default class User extends Component {
         </View>
         <View style={styles.bottomView}>
         <Button
-          
           style={styles.buttonStyle} textStyle={styles.textStyle}
           onPress={() => {
-            navigator.push(routes[1])
+            this.setState({signinModalVisible:true});
           }}>
           SIGN IN
         </Button>
@@ -103,38 +80,11 @@ export default class User extends Component {
           style={styles.buttonStyle} textStyle={styles.textStyle}
           onPress={() => {
             this.setState({signupModalVisible:true});
-            console.log(this.state.signupModalVisible);
           }}>
           SIGN UP
         </Button>
         </View>
       </View>
-          );}
-        }
-      }
-
-      navigationBar={
-       <Navigator.NavigationBar
-       routeMapper={{
-         LeftButton: (route, navigator, index, navState) =>
-          { return (
-            <TouchableHighlight onPress={() => navigator.pop()}>
-              <Text>Back</Text>
-            </TouchableHighlight>
-            ); },
-         RightButton: (route, navigator, index, navState) =>
-           { return (
-             <TouchableHighlight onPress={() => navigator.push(routes[route.index + 1])}>
-              <Text>Next</Text>
-            </TouchableHighlight>
-           ); },
-         Title: (route, navigator, index, navState) =>
-           { return (<Text>{route.title}</Text>); },
-       }}
-       style={{backgroundColor: 'gray'}}
-     />
-      }
-      />
     );
   }
 }

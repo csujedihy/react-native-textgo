@@ -5,8 +5,7 @@ import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
 import MyNavigationBar from '../Components/MyNavigationBar';
-import phoneFormat from 'phoneformat-react-native';
-import SignUpMobileVerify from './SignUpMobileVerify';
+import Main from '../Components/main';
 
 import {
   StyleSheet,
@@ -18,44 +17,28 @@ import {
   ScrollView,
 } from 'react-native';
 
-export default class SignUpView extends Component {
+export default class SignInView extends Component {
   constructor(props) {
     super(props);
-    console.log('SignUpView Constructor' + props.visible);
+    console.log('SignInView Constructor' + props.visible);
     this.state = {
       username: "",
       password: "",
-      mobile: ""
     }
   }
 
-  IsNumeric(val) {
-    return Number(parseFloat(val)) == val;
-  }
-
-  formatOnChangeText(text) {
-    let formattedNumber = phoneFormat.formatLocal('US', text);
-    this.setState({mobile: formattedNumber});
-  }
 
   rightButtonHandler() {
-    if (!phoneFormat.isValidNumber(phoneFormat.formatLocal('US', this.state.mobile), 'US')) {
-      alert('Phone number is not valid');
-      return;
-    }
 
     console.log('rightButtonHandler');
     console.log(this.state.username, this.state.password)
-    Users.signUp(this.state.username, this.state.password, (err)=>{
-      console.log('SIGN UP rightButtonHandler');
+    Users.signIn(this.state.username, this.state.password, (err)=>{
+      console.log('SIGN IN rightButtonHandler');
       if (err)
         alert(err.message);
       else {
         this.props.navigator.push({
-          component: SignUpMobileVerify,
-          passProps: {
-            mobile: phoneFormat.cleanPhone(this.state.mobile)
-          }
+          component: Main,
         });
       }
     });
@@ -63,12 +46,12 @@ export default class SignUpView extends Component {
 
   render() {
     const rightButtonConfig = {
-      title: 'Next',
+      title: 'Login',
       handler: this.rightButtonHandler.bind(this)
     };
 
     const titleConfig = {
-      title: 'SIGN UP',
+      title: 'SIGN IN',
     };
 
     return (
@@ -80,14 +63,7 @@ export default class SignUpView extends Component {
               <View style={styles.componentsContainer}>
                 <TextField label={'Email'} value={this.state.username} autoCorrect={false} autoCapitalize={'none'} highlightColor={'#00BCD4'}   onChangeText={(text)=>{this.setState({username: text})}}/>
                 <TextField label={'Password'} value={this.state.password} highlightColor={'#00BCD4'} onChangeText={(text)=>{this.setState({password: text})}}/>
-                <TextField label={'Mobile'} value={this.state.mobile} highlightColor={'#00BCD4'} 
-                  keyboardType={'numeric'} 
-                  returnKeyType={'done'} 
-                  onChangeText={(text)=>{this.formatOnChangeText(text)}}
-                  onSubmitEditing={()=>{this.rightButtonHandler}}
-                />
               </View>
-
             </ScrollView>
           </View>
     );

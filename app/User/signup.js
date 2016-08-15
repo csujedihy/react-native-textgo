@@ -68,7 +68,7 @@ export default class SignUp extends Component {
             initialRoute={
               {
                 name: 'SignUpOne', 
-                component: SignUpMobileVerify
+                component: SignUpView
               }
             }
             configureScene={this.configureScene}

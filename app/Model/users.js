@@ -33,10 +33,13 @@ export default class Users {
 		AV.User.logIn(username, password, {
 			success: function(user) {
 				console.log('log in OK');
+				if (callback)
+					callback(null, user);
 			},
 			error: function(user, error) {
 				console.log('log in err:' + error.message);
-				callback(error);
+				if (callback)
+					callback(error, user);
 			}
 		});
 	}
@@ -52,6 +55,18 @@ export default class Users {
 			if (callback)
 				callback(err);
 		});
+	}
 
+	static smsVerification(mobile, callback) {
+		AV.Cloud.run('sendSMSVerification', {"cellNumber": mobile}, {
+			success: function(result) {
+				console.log(result);
+				callback(null, result);
+			},
+			error: function(error) {
+				alert('We can\'t send SMS message to your mobile');
+				callback(error, null);
+			}
+		});
 	}
 }
