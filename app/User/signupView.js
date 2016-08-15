@@ -35,7 +35,7 @@ export default class SignUpView extends Component {
 
   formatOnChangeText(text) {
     let formattedNumber = phoneFormat.formatLocal('US', text);
-    this.setState({mobile: formattedNumber});
+    this.setState({ mobile: formattedNumber });
   }
 
   rightButtonHandler() {
@@ -46,7 +46,7 @@ export default class SignUpView extends Component {
 
     console.log('rightButtonHandler');
     console.log(this.state.username, this.state.password)
-    Users.signUp(this.state.username, this.state.password, (err)=>{
+    Users.signUp(this.state.username, this.state.password, (err) => {
       console.log('SIGN UP rightButtonHandler');
       if (err)
         alert(err.message);
@@ -77,26 +77,26 @@ export default class SignUpView extends Component {
     };
 
     return (
-          <View style={styles.container}>
-            <MyNavigationBar
-              title={titleConfig}
-              rightButton={rightButtonConfig} 
-              leftButton={leftButtonConfig}
-            />
-            <ScrollView keyboardShouldPersistTaps={true}>
-              <View style={styles.componentsContainer}>
-                <TextField label={'Email'} value={this.state.username} autoCorrect={false} autoCapitalize={'none'} highlightColor={'#00BCD4'}   onChangeText={(text)=>{this.setState({username: text})}}/>
-                <TextField label={'Password'} value={this.state.password} highlightColor={'#00BCD4'} onChangeText={(text)=>{this.setState({password: text})}}/>
-                <TextField label={'Mobile'} value={this.state.mobile} highlightColor={'#00BCD4'} 
-                  keyboardType={'numeric'} 
-                  returnKeyType={'done'} 
-                  onChangeText={(text)=>{this.formatOnChangeText(text)}}
-                  onSubmitEditing={()=>{this.rightButtonHandler}}
-                />
-              </View>
-
-            </ScrollView>
+      <View style={styles.container}>
+        <MyNavigationBar
+          title={titleConfig}
+          rightButton={rightButtonConfig}
+          leftButton={leftButtonConfig}
+          />
+        <ScrollView keyboardShouldPersistTaps={true}>
+          <View style={styles.componentsContainer}>
+            <TextField label={'Email'} value={this.state.username} autoCorrect={false} autoCapitalize={'none'} highlightColor={'#00BCD4'}   onChangeText={(text) => { this.setState({ username: text }) } }/>
+            <TextField label={'Password'} value={this.state.password} highlightColor={'#00BCD4'} onChangeText={(text) => { this.setState({ password: text }) } }/>
+            <TextField label={'Mobile'} value={this.state.mobile} highlightColor={'#00BCD4'}
+              keyboardType={'numeric'}
+              returnKeyType={'done'}
+              onChangeText={(text) => { this.formatOnChangeText(text) } }
+              onSubmitEditing={() => { this.rightButtonHandler } }
+              />
           </View>
+
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -114,10 +114,10 @@ const styles = StyleSheet.create({
     borderColor: '#196EEF',
     borderWidth: 2,
     borderRadius: 10,
-		margin: 10,
-		padding: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
+    margin: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
