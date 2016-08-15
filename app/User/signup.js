@@ -5,7 +5,6 @@ import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
 import SignUpView from './signupView';
-import {mapper, updateMapper} from '../Components/navigatorBarMapper';
 import SignUpMobileVerify from './SignUpMobileVerify';
 
 import {

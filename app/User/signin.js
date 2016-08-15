@@ -15,7 +15,7 @@ import {
   Alert,
   Modal,
   Navigator,
-	TouchableOpacity
+  TouchableOpacity
 } from 'react-native';
 
 export default class SignIn extends Component {
@@ -32,15 +32,15 @@ export default class SignIn extends Component {
   }
 
   componentDidMount() {
-    this.setState({modalVisible: this.props.visible});
+    this.setState({ modalVisible: this.props.visible });
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({modalVisible: nextProps.visible});
+    this.setState({ modalVisible: nextProps.visible });
   }
 
   modalClose() {
-    this.setState({modalVisible: false});
+    this.setState({ modalVisible: false });
   }
 
   configureScene(route, routeStack) {
@@ -53,32 +53,32 @@ export default class SignIn extends Component {
   renderScene(route, navigator) {
     return <route.component navigator={navigator}  {...route.passProps} />;
   }
-  
+
   render() {
     console.log('Modal render()' + this.props.visible);
     var username = "";
     var password = "";
 
     return (
-        <Modal
-          animationType={"slide"}
-          transparent={false}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {alert("Modal has been closed.")}}>
-          <Navigator
-            style={styles.navigator}
-            initialRoute={
-              {
-                component: SignInView,
-                passProps: {
-                  modalClose: this.modalClose.bind(this)
-                }
+      <Modal
+        animationType={"slide"}
+        transparent={false}
+        visible={this.state.modalVisible}
+        onRequestClose={() => { alert("Modal has been closed.") } }>
+        <Navigator
+          style={styles.navigator}
+          initialRoute={
+            {
+              component: SignInView,
+              passProps: {
+                modalClose: this.modalClose.bind(this)
               }
             }
-            configureScene={this.configureScene}
-            renderScene={this.renderScene}
+          }
+          configureScene={this.configureScene}
+          renderScene={this.renderScene}
           />
-        </Modal>
+      </Modal>
     );
   }
 }
@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
   navigator: {
     flex: 1
   },
-	leftNavButton: {
-		marginLeft: 10
-	},
-	rightNavButton: {
-		marginRight: 10
-	},
+  leftNavButton: {
+    marginLeft: 10
+  },
+  rightNavButton: {
+    marginRight: 10
+  },
   navContainer: {
     backgroundColor: '#81c04d',
     paddingTop: 12,
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
     borderColor: '#196EEF',
     borderWidth: 2,
     borderRadius: 10,
-		margin: 10,
-		padding: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
+    margin: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
