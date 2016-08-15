@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
 import {
-  StyleSheet,
-  StatusBar,
-  UIManager,
-  View,
-  Text,
-  Alert,
-  Modal,
-  Navigator,
-  TouchableOpacity
+	StyleSheet,
+	StatusBar,
+	UIManager,
+	View,
+	Text,
+	Alert,
+	Modal,
+	Navigator,
+	TouchableOpacity
 } from 'react-native';
 
 export function updateMapper(_mapper) {
