@@ -49,8 +49,16 @@ export default class User extends Component {
     
     return (
       <View style={styles.main}>
-        <SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
-        <SignIn visible={this.state.signinModalVisible} setUserCallback={this.props.setUserCallback}/>
+        <SignUp visible={this.state.signupModalVisible}
+          setUserCallback={this.props.setUserCallback} 
+          modalVisibileCallback={()=>{
+            this.setState({signupModalVisible: true})
+          }}/>
+        <SignIn visible={this.state.signinModalVisible} 
+          setUserCallback={this.props.setUserCallback}          
+          modalVisibileCallback={()=>{
+            this.setState({signinModalVisible: true})
+          }}/>
         <View style={styles.topView}>
           <ScrollView 
             style={styles.scrollView} 

@@ -39,6 +39,10 @@ export default class SignIn extends Component {
     this.setState({modalVisible: nextProps.visible});
   }
 
+  modalClose() {
+    this.setState({modalVisible: false});
+  }
+
   configureScene(route, routeStack) {
     if (route.type == 'Bottom') {
       return Navigator.SceneConfigs.FloatFromBottom;
@@ -65,7 +69,10 @@ export default class SignIn extends Component {
             style={styles.navigator}
             initialRoute={
               {
-                component: SignInView
+                component: SignInView,
+                passProps: {
+                  modalClose: this.modalClose.bind(this)
+                }
               }
             }
             configureScene={this.configureScene}

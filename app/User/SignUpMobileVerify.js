@@ -56,11 +56,16 @@ export default class SignUpMobileVerify extends Component {
 	}
 
 	render() {
+		const leftButtonConfig = {
+      title: 'Back',
+      handler: ()=> {
+				this.props.navigator.pop()
+			}
+    };
 		const rightButtonConfig = {
       title: 'Verify',
       handler: this.rightButtonHandler.bind(this)
     };
-
     const titleConfig = {
       title: 'MOBILE',
     };
@@ -68,7 +73,9 @@ export default class SignUpMobileVerify extends Component {
 			<View style={styles.container}>
 				<MyNavigationBar
 					title={titleConfig}
-					rightButton={rightButtonConfig} />
+					rightButton={rightButtonConfig} 
+					leftButton={leftButtonConfig}
+				/>
 				<ScrollView keyboardShouldPersistTaps={true}>
 					<View style={styles.textContainer}>
 						<Text>You will receive the verification code in a SMS message.</Text>

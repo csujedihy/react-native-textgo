@@ -62,6 +62,11 @@ export default class SignUpView extends Component {
   }
 
   render() {
+    const leftButtonConfig = {
+      title: 'Cancel',
+      handler: this.props.modalClose
+    };
+
     const rightButtonConfig = {
       title: 'Next',
       handler: this.rightButtonHandler.bind(this)
@@ -75,7 +80,9 @@ export default class SignUpView extends Component {
           <View style={styles.container}>
             <MyNavigationBar
               title={titleConfig}
-              rightButton={rightButtonConfig} />
+              rightButton={rightButtonConfig} 
+              leftButton={leftButtonConfig}
+            />
             <ScrollView keyboardShouldPersistTaps={true}>
               <View style={styles.componentsContainer}>
                 <TextField label={'Email'} value={this.state.username} autoCorrect={false} autoCapitalize={'none'} highlightColor={'#00BCD4'}   onChangeText={(text)=>{this.setState({username: text})}}/>
