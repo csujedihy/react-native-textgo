@@ -14,69 +14,69 @@ import Users from './Model/users';
 const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
 const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
 AV.init({
-	appId,
-	appKey,
-	region: 'us',
+  appId,
+  appKey,
+  region: 'us',
 });
 
 import {
-	StyleSheet,
-	StatusBar,
-	UIManager,
-	View,
-	Text,
-	Alert,
-	Navigator,
-	TouchableHighlight
+  StyleSheet,
+  StatusBar,
+  UIManager,
+  View,
+  Text,
+  Alert,
+  Navigator,
+  TouchableHighlight
 } from 'react-native';
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
 class App extends Component {
 
-	constructor() {
-		super();
-		this.state = {currentUser: null};
-	}
+  constructor() {
+    super();
+    this.state = { currentUser: null };
+  }
 
-	setCurrentUser() {
-		AV.User.currentAsync().then((currentUser)=>{
-				if (currentUser) {
-						// Alert.alert('', JSON.stringify(currentUser));
-						console.log('Has currentUser');
-						// FIXME: maybe there is a 'this' trap
-						this.setState({currentUser: currentUser});
-				}
-		});
-	}
+  setCurrentUser() {
+    AV.User.currentAsync().then((currentUser) => {
+      if (currentUser) {
+        // Alert.alert('', JSON.stringify(currentUser));
+        console.log('Has currentUser');
+        // FIXME: maybe there is a 'this' trap
+        this.setState({ currentUser: currentUser });
+      }
+    });
+  }
 
 
-	componentDidMount() {
-		this.setCurrentUser();
-	}
+  componentDidMount() {
+    this.setCurrentUser();
+  }
 
-	render() {
-			if (this.state.currentUser)
-				return (
-						<View style={styles.container} >
-							<StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-							<Main/>
-						</View>
-				);
-			else
-				return (
-					<View style={styles.container} >
-						<StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-						<User setUserCallback={this.setCurrentUser.bind(this)}/>
-					</View>
-				);
-		}
-	}
+  render() {
+    if (this.state.currentUser)
+      return (
+        <View style={styles.container} >
+          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+          <Main/>
+        </View>
+      );
+    else
+      return (
+        <View style={styles.container} >
+          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+          <User setUserCallback={this.setCurrentUser.bind(this) }/>
+        </View>
+      );
+    }
+}
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
+  container: {
+    flex: 1,
+  },
 });
 
 

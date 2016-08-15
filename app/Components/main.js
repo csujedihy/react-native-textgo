@@ -36,32 +36,32 @@ Contacts.getAll((err, contacts) => {
 });
 */
 
-var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});  
-allContacts =  ds.cloneWithRows([{    
-      recordID: 1,
-        familyName: "Huang",
-        givenName: "Yi",
-        middleName: "",
-        emailAddresses: [{
-        label: "work",
-        email: "yihuang@email.tamu.edu",
-        }],
-        phoneNumbers: [{
-        label: "mobile",
-        number: "(469) 236-7525",
-        }],
-        thumbnailPath: "",
-    }]);
+var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+allContacts = ds.cloneWithRows([{
+  recordID: 1,
+  familyName: "Huang",
+  givenName: "Yi",
+  middleName: "",
+  emailAddresses: [{
+    label: "work",
+    email: "yihuang@email.tamu.edu",
+  }],
+  phoneNumbers: [{
+    label: "mobile",
+    number: "(469) 236-7525",
+  }],
+  thumbnailPath: "",
+}]);
 
 
 class Main extends Component {
   constructor() {
     super();
-        this.state = {
-          selectedTab: 'redTab',
-          notifCount: 0,
-          presses: 0,
-        };
+    this.state = {
+      selectedTab: 'redTab',
+      notifCount: 0,
+      presses: 0,
+    };
   }
 
   rightButtonHandler() {
@@ -78,89 +78,93 @@ class Main extends Component {
       title: 'TXTGO',
     };
 
-    return(
+    return (
       <View style={styles.container}>
         <MyNavigationBar
           title={titleConfig}
           rightButton={rightButtonConfig} />
         <Navigator
-        style={styles.container}
-        tintColor='#FF6600'
-        initialRoute={{id: 'Dashboard'}}
-        renderScene={(route, navigator) => this.navigatorRenderScene(route, navigator)}/>
+          style={styles.container}
+          tintColor='#FF6600'
+          initialRoute={{ id: 'Dashboard' }}
+          renderScene={(route, navigator) => this.navigatorRenderScene(route, navigator) }/>
       </View>
 
     );
   }
 
-  navigatorRenderScene(route, navigator){
-    switch(route.id){
+  navigatorRenderScene(route, navigator) {
+    switch (route.id) {
       default:
       case 'Dashboard':
         return (
           <TabBar structure={[{
-              title: 'Contacts',
-              iconName: 'user',
-              renderContent: () => {return(
+            title: 'Contacts',
+            iconName: 'user',
+            renderContent: () => {
+              return (
                 <ListView
                   dataSource={allContacts}
-                  renderRow={(row, route, navigator)=>this.renderListViewRow(row, 'Contacts', route, navigator)}
-                />
-              );}
-              },
-              {
+                  renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Contacts', route, navigator) }
+                  />
+              );
+            }
+          },
+            {
               title: 'Keypad',
               iconName: 'phone',
-              renderContent: () => {return(
-                <ListView
-                  dataSource={allContacts}
-                  renderRow={(row, route, navigator)=>this.renderListViewRow(row, 'Keypad', route, navigator)}
-                />
-              );}
+              renderContent: () => {
+                return (
+                  <ListView
+                    dataSource={allContacts}
+                    renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Keypad', route, navigator) }
+                    />
+                );
               }
-              ]}
-          selectedTab={2}
-          activeTintColor={'#ff8533'}
-          iconSize={25}
-          />
+            }
+          ]}
+            selectedTab={2}
+            activeTintColor={'#ff8533'}
+            iconSize={25}
+            />
         );
-    }  
+    }
   }
-    
-  
-  renderListViewRow(row, pushNavBarTitle, route, navigator){
-    return(
+
+
+  renderListViewRow(row, pushNavBarTitle, route, navigator) {
+    return (
       <TouchableHighlight underlayColor={'#f3f3f2'}
-                onPress={()=>this.selectRow(row, pushNavBarTitle, route, navigator)}>
-      <View style={styles.rowContainer}>
-        <Text style={styles.rowCount}>
-          {row.count}
-        </Text>
-        <View style={styles.rowDetailsContainer}>
-          <Text style={styles.rowTitle}>
-            {row.title}
+        onPress={() => this.selectRow(row, pushNavBarTitle, route, navigator) }>
+        <View style={styles.rowContainer}>
+          <Text style={styles.rowCount}>
+            {row.count}
           </Text>
-          <Text style={styles.rowDetailsLine}>
-            Name: {row.givenName}
-          </Text>
-          <Text style={styles.rowDetailsLine}>
-            Phone: {row.phoneNumbers[0].number} 
-          </Text>
-          <Text style={styles.rowDetailsLine}>
-            Label: {row.phoneNumbers[0].label}
-          </Text>
-          <Text style={styles.rowDetailsLine}>
-            Email: {(typeof row.emailAddresses[0] === 'undefined')? 0 : row.emailAddresses[0].email}
-          </Text>
-          <View style={styles.separator}/>
+          <View style={styles.rowDetailsContainer}>
+            <Text style={styles.rowTitle}>
+              {row.title}
+            </Text>
+            <Text style={styles.rowDetailsLine}>
+              Name: {row.givenName}
+            </Text>
+            <Text style={styles.rowDetailsLine}>
+              Phone: {row.phoneNumbers[0].number}
+            </Text>
+            <Text style={styles.rowDetailsLine}>
+              Label: {row.phoneNumbers[0].label}
+            </Text>
+            <Text style={styles.rowDetailsLine}>
+              Email: {(typeof row.emailAddresses[0] === 'undefined') ? 0 : row.emailAddresses[0].email}
+            </Text>
+            <View style={styles.separator}/>
+          </View>
         </View>
-      </View>
       </TouchableHighlight>
     );
   }
 
-selectRow(row, pushNavBarTitle, route, navigator){
-  return Communications.phonecall(row.phoneNumbers[0].number, true);
+  selectRow(row, pushNavBarTitle, route, navigator) {
+    return Communications.phonecall(row.phoneNumbers[0].number, true);
   }
 
 }
@@ -171,7 +175,7 @@ var styles = StyleSheet.create({
     backgroundColor: '#F6F6EF',
     flexDirection: 'column'
   },
-  rowContainer:{
+  rowContainer: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
@@ -200,12 +204,12 @@ var styles = StyleSheet.create({
     color: 'gray',
   },
   listview: {
-    marginBottom:49
+    marginBottom: 49
   },
   separator: {
     height: 1,
     backgroundColor: '#CCCCCC'
-  } 
+  }
 });
 
 export default Main;
