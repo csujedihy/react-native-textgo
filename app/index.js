@@ -3,7 +3,7 @@
 */
 'use strict';
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
@@ -27,6 +27,7 @@ import {
   Text,
   Alert,
   Navigator,
+  TouchableHighlight
 } from 'react-native';
 
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -48,6 +49,7 @@ class App extends Component {
         }
     });
   }
+
 
   componentDidMount() {
     Users.signOut();

@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 import Parse from 'parse/react-native';
 import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
-import Button from 'apsl-react-native-button';
-import SignUp from './signup';
-import SignIn from './signin';
+import Button from 'apsl-react-native-button'
+import SignUp from './signup'
+import SignIn from './signin'
 
 import {
   StyleSheet,
@@ -17,7 +17,9 @@ import {
   Alert,
 	ScrollView,
 	Image,
-	Dimensions
+	Dimensions,
+	Navigator,
+	TouchableHighlight
 } from 'react-native';
 
 import {
@@ -43,7 +45,31 @@ export default class User extends Component {
     let pic = {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
     };
+		const routes = [
+    	{title: 'TextGo', index: 0 },
+    	{title: 'Sign In', index: 1 },
+    	{title: 'Sign Up', index: 2 },
+  	];
+		
     return (
+			<Navigator
+      initialRoute={routes[0]}
+			renderScene={(route, navigator) =>{
+				if(route.index === 2){
+					return (
+						<SignUp {...route.props} navigator={navigator} route={route}/>
+					);
+				}
+				
+				if(route.index === 1){
+					return (
+						<SignIn {...route.props} navigator={navigator} route={route}/>
+					);
+				}
+			
+				if(route.index === 0){
+					return(
+				
 			<View style={styles.main}>
 				<SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
 				<SignIn visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
@@ -66,9 +92,10 @@ export default class User extends Component {
 				</View>
 				<View style={styles.bottomView}>
         <Button
+					
           style={styles.buttonStyle} textStyle={styles.textStyle}
           onPress={() => {
-            console.log('world!')
+            navigator.push(routes[1])
           }}>
           SIGN IN
         </Button>
@@ -82,7 +109,32 @@ export default class User extends Component {
         </Button>
 				</View>
 			</View>
+					);}
+				}
+			}
 
+			navigationBar={
+     	<Navigator.NavigationBar
+       routeMapper={{
+         LeftButton: (route, navigator, index, navState) =>
+          { return (
+						<TouchableHighlight onPress={() => navigator.pop()}>
+							<Text>Back</Text>
+    				</TouchableHighlight>
+						); },
+         RightButton: (route, navigator, index, navState) =>
+           { return (
+						 <TouchableHighlight onPress={() => navigator.push(routes[route.index + 1])}>
+							<Text>Next</Text>
+    				</TouchableHighlight>
+					 ); },
+         Title: (route, navigator, index, navState) =>
+           { return (<Text>{route.title}</Text>); },
+       }}
+       style={{backgroundColor: 'gray'}}
+     />
+  		}
+			/>
     );
   }
 }
