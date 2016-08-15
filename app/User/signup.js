@@ -1,11 +1,12 @@
 'use strict';
 
 import React, { Component } from 'react';
-import Parse from 'parse/react-native';
-import ParseReact from 'parse-react/react-native';
 import TextField from 'react-native-md-textinput';
 import Button from 'apsl-react-native-button';
 import Users from '../Model/users';
+import SignUpView from './signupView';
+import {mapper, updateMapper} from '../Components/navigatorBarMapper';
+import SignUpMobileVerify from './SignUpMobileVerify';
 
 import {
   StyleSheet,
@@ -15,7 +16,8 @@ import {
   Text,
   Alert,
   Modal,
-  ScrollView
+  Navigator,
+	TouchableOpacity
 } from 'react-native';
 
 export default class SignUp extends Component {
@@ -27,64 +29,71 @@ export default class SignUp extends Component {
     };
   }
 
+  componentWillMount() {
+
+  }
+
   componentDidMount() {
     this.setState({modalVisible: this.props.visible});
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({modalVisible: nextProps.visible});
-
   }
 
+  configureScene(route, routeStack) {
+    if (route.type == 'Bottom') {
+      return Navigator.SceneConfigs.FloatFromBottom;
+    }
+    return Navigator.SceneConfigs.PushFromRight;
+  }
+
+  renderScene(route, navigator) {
+    return <route.component navigator={navigator}  {...route.passProps} />;
+  }
+  
   render() {
     console.log('Modal render()' + this.props.visible);
     var username = "";
     var password = "";
+
     return (
         <Modal
           animationType={"slide"}
           transparent={false}
           visible={this.state.modalVisible}
           onRequestClose={() => {alert("Modal has been closed.")}}>
-          <View style={styles.container}>
-            <ScrollView>
-              <View style={styles.componentsContainer}>
-                <TextField label={'Email'} highlightColor={'#00BCD4'} onChangeText={(text)=>{username=text}}/>
-                <TextField label={'Password'} highlightColor={'#00BCD4'} onChangeText={(text)=>{password=text}}/>
-                <Button
-                  style={styles.buttonStyle} textStyle={styles.textStyle}
-                  onPress={() => {
-                    console.log(username);
-                    console.log(password);
-                    Users.signUp(username, password, (err)=>{
-                      if (err)
-                        alert(err.message);
-                      else {
-                        this.setState({modalVisible: false});
-                        alert('Sign up successfully!');
-                        this.props.setUserCallback();
-                      }
-                    });
-                  }}>
-                  SIGN UP
-                </Button>
-                <Button
-                  style={styles.buttonStyle} textStyle={styles.textStyle}
-                  onPress={() => {
-                    this.setState({modalVisible: false});
-                  }}>
-                  CLOSE
-                </Button>
-              </View>
-
-            </ScrollView>
-          </View>
+          <Navigator
+            style={styles.navigator}
+            initialRoute={
+              {
+                name: 'SignUpOne', 
+                component: SignUpMobileVerify
+              }
+            }
+            configureScene={this.configureScene}
+            renderScene={this.renderScene}
+          />
         </Modal>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  navigator: {
+    flex: 1
+  },
+	leftNavButton: {
+		marginLeft: 10
+	},
+	rightNavButton: {
+		marginRight: 10
+	},
+  navContainer: {
+    backgroundColor: '#81c04d',
+    paddingTop: 12,
+    paddingBottom: 10,
+  },
   container: {
     // marginTop: 22,
     flex: 1,

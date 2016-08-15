@@ -9,6 +9,7 @@ import ParseReact from 'parse-react/react-native';
 import Main from './Components/main';
 import User from './User';
 import AV from 'leancloud-storage';
+import Users from './Model/users';
 
 const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
 const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
@@ -49,12 +50,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    AV.User.logOut().then(()=>{
-      console.log('LogOut OK');
-      this.setState({currentUser: null})
-    }, (err)=>{
-      console.log(err.message);
-    });
+    Users.signOut();
     this._setCurrentUser();
   }
 
