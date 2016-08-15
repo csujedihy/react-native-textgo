@@ -9,23 +9,23 @@ import SignUp from './signup'
 import SignIn from './signin'
 
 import {
-	StyleSheet,
-	StatusBar,
-	UIManager,
-	View,
-	Text,
-	Alert,
-	ScrollView,
-	Image,
-	Dimensions,
-	Navigator,
-	TouchableHighlight
+  StyleSheet,
+  StatusBar,
+  UIManager,
+  View,
+  Text,
+  Alert,
+  ScrollView,
+  Image,
+  Dimensions,
+  Navigator,
+  TouchableHighlight
 } from 'react-native';
 
 import {
   MKTextField,
   MKColor,
-	MKButton
+  MKButton
 } from 'react-native-material-kit';
 
 const CARD_PREVIEW_WIDTH = 20
@@ -35,122 +35,122 @@ const CARD_HEIGHT = Dimensions.get('window').height - 50;
 
 
 export default class User extends Component {
-	constructor() {
-		super();
-		this.state = {signupModalVisible: false}
-	}
+  constructor() {
+    super();
+    this.state = {signupModalVisible: false}
+  }
 
   render() {
-		console.log('index render()' + this.state.signupModalVisible);
+    console.log('index render()' + this.state.signupModalVisible);
     let pic = {
       uri: 'https://upload.wikimedia.org/wikipedia/commons/d/de/Bananavarieties.jpg'
     };
-		const routes = [
-    	{title: 'TextGo', index: 0 },
-    	{title: 'Sign In', index: 1 },
-    	{title: 'Sign Up', index: 2 },
-  	];
-		
+    const routes = [
+      {title: 'TextGo', index: 0 },
+      {title: 'Sign In', index: 1 },
+      {title: 'Sign Up', index: 2 },
+    ];
+    
     return (
-			<Navigator
+      <Navigator
       initialRoute={routes[0]}
-			renderScene={(route, navigator) =>{
-				if(route.index === 2){
-					return (
-						<SignUp {...route.props} navigator={navigator} route={route}/>
-					);
-				}
-				
-				if(route.index === 1){
-					return (
-						<SignIn {...route.props} navigator={navigator} route={route}/>
-					);
-				}
-			
-				if(route.index === 0){
-					return(
-				
-			<View style={styles.main}>
-				<SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
-				<SignIn visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
-				<View style={styles.topView}>
-					<ScrollView 
-						style={styles.scrollView} 
-						automaticallyAdjustInsets={false}
-						horizontal={true}
-						decelerationRate={1}
-						pagingEnabled={true}
-						>
-						<View style={styles.scrollViewContent}> 
-							<View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
-							<View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
-							<View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
-							<View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
-							<View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>		
-						</View>
-					</ScrollView>
-				</View>
-				<View style={styles.bottomView}>
+      renderScene={(route, navigator) =>{
+        if(route.index === 2){
+          return (
+            <SignUp {...route.props} navigator={navigator} route={route}/>
+          );
+        }
+        
+        if(route.index === 1){
+          return (
+            <SignIn {...route.props} navigator={navigator} route={route}/>
+          );
+        }
+      
+        if(route.index === 0){
+          return(
+        
+      <View style={styles.main}>
+        <SignUp visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
+        <SignIn visible={this.state.signupModalVisible} setUserCallback={this.props.setUserCallback}/>
+        <View style={styles.topView}>
+          <ScrollView 
+            style={styles.scrollView} 
+            automaticallyAdjustInsets={false}
+            horizontal={true}
+            decelerationRate={1}
+            pagingEnabled={true}
+            >
+            <View style={styles.scrollViewContent}> 
+              <View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
+              <View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
+              <View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
+              <View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>
+              <View style={styles.imageBannerContainer}><Image source={pic} style={styles.image}/></View>    
+            </View>
+          </ScrollView>
+        </View>
+        <View style={styles.bottomView}>
         <Button
-					
+          
           style={styles.buttonStyle} textStyle={styles.textStyle}
           onPress={() => {
             navigator.push(routes[1])
           }}>
           SIGN IN
         </Button>
-				<Button
+        <Button
           style={styles.buttonStyle} textStyle={styles.textStyle}
           onPress={() => {
             this.setState({signupModalVisible:true});
-						console.log(this.state.signupModalVisible);
+            console.log(this.state.signupModalVisible);
           }}>
           SIGN UP
         </Button>
-				</View>
-			</View>
-					);}
-				}
-			}
+        </View>
+      </View>
+          );}
+        }
+      }
 
-			navigationBar={
-     	<Navigator.NavigationBar
+      navigationBar={
+       <Navigator.NavigationBar
        routeMapper={{
          LeftButton: (route, navigator, index, navState) =>
           { return (
-						<TouchableHighlight onPress={() => navigator.pop()}>
-							<Text>Back</Text>
-    				</TouchableHighlight>
-						); },
+            <TouchableHighlight onPress={() => navigator.pop()}>
+              <Text>Back</Text>
+            </TouchableHighlight>
+            ); },
          RightButton: (route, navigator, index, navState) =>
            { return (
-						 <TouchableHighlight onPress={() => navigator.push(routes[route.index + 1])}>
-							<Text>Next</Text>
-    				</TouchableHighlight>
-					 ); },
+             <TouchableHighlight onPress={() => navigator.push(routes[route.index + 1])}>
+              <Text>Next</Text>
+            </TouchableHighlight>
+           ); },
          Title: (route, navigator, index, navState) =>
            { return (<Text>{route.title}</Text>); },
        }}
        style={{backgroundColor: 'gray'}}
      />
-  		}
-			/>
+      }
+      />
     );
   }
 }
 
 const styles = StyleSheet.create({
-	scrollViewContent: {
-		flexDirection:'row',
-		flexWrap: 'wrap',
-		alignItems: 'flex-start',
-		flex: 1
+  scrollViewContent: {
+    flexDirection:'row',
+    flexWrap: 'wrap',
+    alignItems: 'flex-start',
+    flex: 1
   },
-	image: {
-		height: CARD_HEIGHT,
-		width: CARD_WIDTH
-	},
-	imageBanner: {
+  image: {
+    height: CARD_HEIGHT,
+    width: CARD_WIDTH
+  },
+  imageBanner: {
     flex: 1,
     backgroundColor: '#ccc',
     width: CARD_WIDTH,
@@ -159,43 +159,43 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-	scrollView: {
+  scrollView: {
     backgroundColor: '#FFFFFF',
-		flex: 1
+    flex: 1
   },
   main: {
-		flex: 1,
-		flexDirection: 'column',
-	},
-	topView: {
     flex: 1,
-	},
-	bottomView: {
-		flexDirection: 'row',
-		height: 60
+    flexDirection: 'column',
   },
-	signButton: {
-		margin: 10,
-		padding: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
-	},
-	buttonText: {
-		textAlign: 'center',
-	},
+  topView: {
+    flex: 1,
+  },
+  bottomView: {
+    flexDirection: 'row',
+    height: 60
+  },
+  signButton: {
+    margin: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  buttonText: {
+    textAlign: 'center',
+  },
   buttonStyle: {
     backgroundColor: '#196EEF',
     borderColor: '#196EEF',
     borderWidth: 2,
     borderRadius: 10,
-		margin: 10,
-		padding: 10,
-		alignItems: 'center',
-		justifyContent: 'center',
-		flex: 1,
+    margin: 10,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
-	textStyle: {
+  textStyle: {
     color: 'white'
   },
 });
