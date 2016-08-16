@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { createStore, applyMiddleware, combineReducers } from 'redux';
-//import { Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import * as reducers from './Reducers';
@@ -13,7 +13,9 @@ const store = createStoreWithMiddleware(reducer);
 export default class Root extends Component {
   render() {
     return (
-      <App store={store}/>
+      <Provider store={store}>
+        <App />
+      </Provider>
     );
   }
 }

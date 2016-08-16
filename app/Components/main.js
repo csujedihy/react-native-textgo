@@ -3,6 +3,9 @@
 import React, { Component } from 'react';
 import MyNavigationBar from '../Components/MyNavigationBar';
 import Users from '../Model/users';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../actions/userActions';
 
 import {
   TabBarIOS,
@@ -65,7 +68,9 @@ class Main extends Component {
   }
 
   rightButtonHandler() {
-    Users.signOut();
+    const {state, actions} = this.props;
+    const {signOutAsync} = actions;
+    signOutAsync();
   }
 
   render() {
@@ -212,4 +217,11 @@ var styles = StyleSheet.create({
   }
 });
 
-export default Main;
+
+export default connect(state => ({
+    state: state.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+)(Main);

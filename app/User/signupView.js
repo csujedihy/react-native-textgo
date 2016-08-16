@@ -46,7 +46,7 @@ export default class SignUpView extends Component {
 
     console.log('rightButtonHandler');
     console.log(this.state.username, this.state.password)
-    Users.signUp(this.state.username, this.state.password, (err) => {
+    Users.signUp(this.state.username, this.state.password, this.state.mobile, (err) => {
       console.log('SIGN UP rightButtonHandler');
       if (err)
         alert(err.message);

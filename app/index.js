@@ -12,7 +12,7 @@ import AV from 'leancloud-storage';
 import Users from './Model/users';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
-import * as userActions from './actions/actions';
+import * as userActions from './actions/userActions';
 
 const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
 const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
@@ -36,44 +36,43 @@ import {
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
 
 class App extends Component {
-
   constructor() {
     super();
-    this.state = { currentUser: null };
   }
 
-  setCurrentUser() {
-    AV.User.currentAsync().then((currentUser) => {
-      if (currentUser) {
-        // Alert.alert('', JSON.stringify(currentUser));
-        console.log('Has currentUser');
-        // FIXME: maybe there is a 'this' trap
-        this.setState({ currentUser: currentUser });
-      }
-    });
+  setup() {
+    const {state, actions} = this.props;
+    const {localSigInAsync} = actions;
+    localSigInAsync();
   }
-
 
   componentDidMount() {
-    this.setCurrentUser();
+    this.setup();
   }
 
   render() {
-    if (this.state.currentUser)
+    const {state, actions} = this.props;
+    console.log('App re-render ' + state.isLoggedIn);
+
+    if (state.isLoggedIn == 0) {
+      return (<View></View>);
+    } else if (state.isLoggedIn == 1) {
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
           <Main/>
         </View>
       );
-    else
+    } else if (state.isLoggedIn == 2) {
+      console.log('this is a branch for state.isLoggedIn == 2');
       return (
         <View style={styles.container} >
           <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
-          <User setUserCallback={this.setCurrentUser.bind(this) }/>
+          <User/>
         </View>
       );
     }
+  }
 }
 
 const styles = StyleSheet.create({
@@ -81,7 +80,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
 
 export default connect(state => ({
     state: state.user

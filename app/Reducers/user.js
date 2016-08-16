@@ -1,21 +1,20 @@
 import * as types from '../actions/types';
 
 const initialState = {
-  isLoggedIn: false,
+  isLoggedIn: 0,
 };
-
 
 function user(state = initialState, action ={}) {
   if (action.type === 'LOGGED_IN') {
     return {
-      state,
-      isLoggedIn: true
+      ...state,
+      isLoggedIn: 1
     };
   }
   if (action.type === 'LOGGED_OUT') {
 		return {
-			state,
-			isLoggedIn: false
+			...state,
+			isLoggedIn: 2
 		}
   }
   return state;
