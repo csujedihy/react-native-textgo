@@ -10,6 +10,9 @@ import Main from './Components/main';
 import User from './User';
 import AV from 'leancloud-storage';
 import Users from './Model/users';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from './actions/actions';
 
 const appId = 'OmovAetS584xzswiLQ7l60sp-MdYXbMMI';
 const appKey = 'kfol3uTyBLnnGHnPj3lF7fqQ';
@@ -80,4 +83,10 @@ const styles = StyleSheet.create({
 });
 
 
-export default App;
+export default connect(state => ({
+    state: state.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+)(App);

@@ -9,6 +9,6 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import App from './app';
+import Root from './app/root';
 
-AppRegistry.registerComponent('textgo', () => App);
+AppRegistry.registerComponent('textgo', () => Root);
