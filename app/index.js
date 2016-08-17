@@ -59,15 +59,14 @@ class App extends Component {
     } else if (state.isLoggedIn == 1) {
       return (
         <View style={styles.container} >
-          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+          <StatusBar backgroundColor='transparent' animated={true} translucent={true}/>
           <Main/>
         </View>
       );
     } else if (state.isLoggedIn == 2) {
-      console.log('this is a branch for state.isLoggedIn == 2');
       return (
         <View style={styles.container} >
-          <StatusBar backgroundColor='transparent' animated={true} translucent={true} barStyle="light-content"/>
+          <StatusBar backgroundColor='transparent' animated={true} translucent={true}/>
           <User/>
         </View>
       );
