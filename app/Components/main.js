@@ -3,6 +3,12 @@
 import React, { Component } from 'react';
 import MyNavigationBar from '../Components/MyNavigationBar';
 import Users from '../Model/users';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../actions/userActions';
+import TabBar from '../Components/TabBar';
+import Contacts from 'react-native-contacts';
+import Communications from 'react-native-communications';
 
 import {
   TabBarIOS,
@@ -20,12 +26,6 @@ import {
   Navigator,
 } from 'react-native';
 
-import TabBar from '../Components/TabBar';
-import Contacts from 'react-native-contacts';
-import Communications from 'react-native-communications';
-import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux';
-import * as userActions from '../actions/actions';
 
 
 /*
@@ -108,8 +108,9 @@ class Main extends Component {
   }
 
   rightButtonHandler() {
-    //Users.signOut();
-    this.props.actions.logOut();
+    const {state, actions} = this.props;
+    const {signOutAsync} = actions;
+    signOutAsync();
   }
 
   render() {
@@ -260,12 +261,10 @@ var styles = StyleSheet.create({
 });
 
 
-export default connect(reducer => ({
-    isLoggedIn: reducer.user.isLoggedIn
+export default connect(state => ({
+    state: state.user
   }),
   (dispatch) => ({
     actions: bindActionCreators(userActions, dispatch)
   })
 )(Main);
-
-//export default Main;

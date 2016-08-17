@@ -7,24 +7,25 @@ export default class Users {
     this.id = id; 
   }
 
-  static signUp(username, password, callback) {
+  static signUp(username, password, mobile, callback) {
     var user = new AV.User();
     try {
       user.set("username", username);
       user.set("password", password);
       user.set("email", username);
+      user.set("mobile", mobile);
       user.signUp(null).then(function(_user){
         console.log('sign up OK')
         if (callback)
-          callback(null);
+          callback(null, user);
       }, function(err){
         console.log('sign up not OK');
         if (callback)
-          callback(err);
+          callback(err, null);
       });
     } catch (error) {
       if (callback)
-        callback(error);
+        callback(error, null);
     }
 
   }
@@ -67,6 +68,12 @@ export default class Users {
         alert('We can\'t send SMS message to your mobile');
         callback(error, null);
       }
+    });
+  }
+
+  static setCurrentUser(callback) {
+    AV.User.currentAsync().then((currentUser) => {
+      callback(currentUser);
     });
   }
 }
