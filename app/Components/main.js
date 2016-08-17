@@ -23,20 +23,12 @@ import {
 import TabBar from '../Components/TabBar';
 import Contacts from 'react-native-contacts';
 import Communications from 'react-native-communications';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../actions/actions';
 
-var allContacts;
+
 /*
-Contacts.getAll((err, contacts) => {
-  if(err && err.type === 'permissionDenied'){
-    console.log("permissionDenied");
-  }else{
-    console.log("permissionGranted");
-    allContacts = contacts;
-  }
-});
-*/
-
-var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 allContacts = ds.cloneWithRows([{
   recordID: 1,
   familyName: "Huang",
@@ -52,20 +44,72 @@ allContacts = ds.cloneWithRows([{
   }],
   thumbnailPath: "",
 }]);
+*/
 
+var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class Main extends Component {
   constructor() {
     super();
+    console.log("start to set state.")
+    /*
+    var contactsData = this._genRows();
+    console.log("contactsData by _genRows: " + contactsData);
+    if(typeof contactsData === 'undefined'){
+      contactsData = [];
+    };
+    */
     this.state = {
       selectedTab: 'redTab',
       notifCount: 0,
       presses: 0,
+      //dataSource: ds.cloneWithRows(contactsData)
+      dataSource: ds.cloneWithRows([])
     };
+    this._genRows();
+    console.log("main.js initial finished.")
+  }
+
+
+/*
+    Contacts.checkPermission( (err, permission) => {
+      // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
+      if(permission === 'undefined'){
+        Contacts.requestPermission( (err, permission) => {
+          console.log("require permission");
+        })
+      }
+      if(permission === 'authorized'){
+        console.log("permission got");
+      }
+      if(permission === 'denied'){
+        console.log("refused");
+      }
+    })
+*/
+
+    
+  _genRows(){
+    console.log("start to get contacts.")
+    Contacts.getAll((err, contacts) => {
+      console.log("contact callback get called.")
+      if(err && err.type === 'permissionDenied'){
+        console.log("permissionDenied");
+        this.setState({dataSource: ds.cloneWithRows([])});
+        return [];
+      } else {
+        console.log("permissionGranted");
+        console.log("real contacts: ", contacts);
+        this.setState({dataSource: ds.cloneWithRows(contacts)});
+        //this.setState({dataSource: ds.cloneWithRows([])});
+        return contacts;
+      }
+    });
   }
 
   rightButtonHandler() {
-    Users.signOut();
+    //Users.signOut();
+    this.props.actions.logOut();
   }
 
   render() {
@@ -102,9 +146,11 @@ class Main extends Component {
             title: 'Contacts',
             iconName: 'user',
             renderContent: () => {
+              console.log(this.state.dataSource)
               return (
                 <ListView
-                  dataSource={allContacts}
+                  enableEmptySections={true}
+                  dataSource={this.state.dataSource}
                   renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Contacts', route, navigator) }
                   />
               );
@@ -116,7 +162,8 @@ class Main extends Component {
               renderContent: () => {
                 return (
                   <ListView
-                    dataSource={allContacts}
+                    enableEmptySections={true}
+                    dataSource={this.state.dataSource}
                     renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Keypad', route, navigator) }
                     />
                 );
@@ -212,4 +259,13 @@ var styles = StyleSheet.create({
   }
 });
 
-export default Main;
+
+export default connect(reducer => ({
+    isLoggedIn: reducer.user.isLoggedIn
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+)(Main);
+
+//export default Main;

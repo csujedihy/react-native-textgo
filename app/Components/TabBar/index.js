@@ -35,7 +35,7 @@ import {
 
 
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import CustomTabBar from './customTabBar.android.js';
+import CustomTabBar from './customTabBarAndroid';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
