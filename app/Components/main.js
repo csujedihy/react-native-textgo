@@ -9,6 +9,8 @@ import * as userActions from '../actions/userActions';
 import TabBar from '../Components/TabBar';
 import Contacts from 'react-native-contacts';
 import Communications from 'react-native-communications';
+import ContactCard from './ContactCard';
+import MainView from './MainView';
 
 import {
   TabBarIOS,
@@ -27,82 +29,53 @@ import {
 } from 'react-native';
 
 
-
-/*
-allContacts = ds.cloneWithRows([{
-  recordID: 1,
-  familyName: "Huang",
-  givenName: "Yi",
-  middleName: "",
-  emailAddresses: [{
-    label: "work",
-    email: "yihuang@email.tamu.edu",
-  }],
-  phoneNumbers: [{
-    label: "mobile",
-    number: "(469) 236-7525",
-  }],
-  thumbnailPath: "",
-}]);
-*/
-
 var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class Main extends Component {
   constructor() {
     super();
     console.log("start to set state.")
-    /*
-    var contactsData = this._genRows();
-    console.log("contactsData by _genRows: " + contactsData);
-    if(typeof contactsData === 'undefined'){
-      contactsData = [];
-    };
-    */
     this.state = {
       selectedTab: 'redTab',
       notifCount: 0,
       presses: 0,
-      //dataSource: ds.cloneWithRows(contactsData)
-      dataSource: ds.cloneWithRows([])
+      dataSource: ds.cloneWithRows([]),
+      testData: 0,
     };
-    this._genRows();
     console.log("main.js initial finished.")
   }
 
-
-/*
+  componentDidMount(){
+    console.log("main.js: componentDidMount");
+    this.genRows();
+  }
+    
+  genRows(){
     Contacts.checkPermission( (err, permission) => {
-      // Contacts.PERMISSION_AUTHORIZED || Contacts.PERMISSION_UNDEFINED || Contacts.PERMISSION_DENIED
-      if(permission === 'undefined'){
+      console.log("current permission: " + permission);
+      if(permission === 'undefined' || permission === 'denied'){
+        alert("Contacts not authorized! Please go to 'Settings'->'Privacy'->'Contacts' and grant permission.");
         Contacts.requestPermission( (err, permission) => {
-          console.log("require permission");
+          console.log("current permission: " + permission);
+          console.log("require permission succeed");
         })
       }
-      if(permission === 'authorized'){
-        console.log("permission got");
-      }
-      if(permission === 'denied'){
-        console.log("refused");
-      }
     })
-*/
 
-    
-  _genRows(){
     console.log("start to get contacts.")
     Contacts.getAll((err, contacts) => {
       console.log("contact callback get called.")
       if(err && err.type === 'permissionDenied'){
         console.log("permissionDenied");
         this.setState({dataSource: ds.cloneWithRows([])});
-        return [];
+        //return [];
       } else {
         console.log("permissionGranted");
-        console.log("real contacts: ", contacts);
-        this.setState({dataSource: ds.cloneWithRows(contacts)});
+        console.log("contacts: ", contacts);
+        this.setState({dataSource: ds.cloneWithRows(contacts), testData: 1});
+        console.log("main.js: this.setState() get called")
         //this.setState({dataSource: ds.cloneWithRows([])});
-        return contacts;
+        //return contacts;
       }
     });
   }
@@ -113,7 +86,28 @@ class Main extends Component {
     signOutAsync();
   }
 
+  configureScene(route, routeStack) {
+    console.log("main.js: configureScene called")
+    if (route.type == 'Bottom') {
+      return Navigator.SceneConfigs.FloatFromBottom;
+    }
+    return Navigator.SceneConfigs.PushFromRight;
+  }
+
+  renderScene(route, navigator) {
+    console.log("main.js: renderScene called")
+    //return <route.component navigator={navigator}  {...route.passProps} />;
+    return (
+      <route.component 
+        navigator={navigator}  
+        {...route.passProps}
+        dataSource={this.state.dataSource}
+      />
+    );
+  }
+
   render() {
+    console.log("main.js: start render/re-render")
     const rightButtonConfig = {
       title: 'SIGN OUT',
       handler: this.rightButtonHandler.bind(this)
@@ -122,106 +116,35 @@ class Main extends Component {
     const titleConfig = {
       title: 'TXTGO',
     };
-
+    var test = this.state.testData;
     return (
-      <View style={styles.container}>
-        <MyNavigationBar
-          title={titleConfig}
-          rightButton={rightButtonConfig} />
-        <Navigator
-          style={styles.container}
-          tintColor='#FF6600'
-          initialRoute={{ id: 'Dashboard' }}
-          renderScene={(route, navigator) => this.navigatorRenderScene(route, navigator) }/>
-      </View>
-
-    );
-  }
-
-  navigatorRenderScene(route, navigator) {
-    switch (route.id) {
-      default:
-      case 'Dashboard':
-        return (
-          <TabBar structure={[{
-            title: 'Contacts',
-            iconName: 'user',
-            renderContent: () => {
-              console.log(this.state.dataSource)
-              return (
-                <ListView
-                  enableEmptySections={true}
-                  dataSource={this.state.dataSource}
-                  renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Contacts', route, navigator) }
-                  />
-              );
+      <Navigator 
+        //tintColor='#FF6600'
+        initialRoute={
+          {
+            component: MainView,
+            passProps: {
+              dataSource: this.state.dataSource,
+              testData: test
             }
-          },
-            {
-              title: 'Keypad',
-              iconName: 'phone',
-              renderContent: () => {
-                return (
-                  <ListView
-                    enableEmptySections={true}
-                    dataSource={this.state.dataSource}
-                    renderRow={(row, route, navigator) => this.renderListViewRow(row, 'Keypad', route, navigator) }
-                    />
-                );
-              }
-            }
-          ]}
-            selectedTab={2}
-            activeTintColor={'#ff8533'}
-            iconSize={25}
-            />
-        );
-    }
-  }
-
-
-  renderListViewRow(row, pushNavBarTitle, route, navigator) {
-    return (
-      <TouchableHighlight underlayColor={'#f3f3f2'}
-        onPress={() => this.selectRow(row, pushNavBarTitle, route, navigator) }>
-        <View style={styles.rowContainer}>
-          <Text style={styles.rowCount}>
-            {row.count}
-          </Text>
-          <View style={styles.rowDetailsContainer}>
-            <Text style={styles.rowTitle}>
-              {row.title}
-            </Text>
-            <Text style={styles.rowDetailsLine}>
-              Name: {row.givenName}
-            </Text>
-            <Text style={styles.rowDetailsLine}>
-              Phone: {row.phoneNumbers[0].number}
-            </Text>
-            <Text style={styles.rowDetailsLine}>
-              Label: {row.phoneNumbers[0].label}
-            </Text>
-            <Text style={styles.rowDetailsLine}>
-              Email: {(typeof row.emailAddresses[0] === 'undefined') ? 0 : row.emailAddresses[0].email}
-            </Text>
-            <View style={styles.separator}/>
-          </View>
-        </View>
-      </TouchableHighlight>
+          }
+        }
+        configureScene={this.configureScene.bind(this)}
+        renderScene={this.renderScene.bind(this)}
+      />
     );
-  }
-
-  selectRow(row, pushNavBarTitle, route, navigator) {
-    return Communications.phonecall(row.phoneNumbers[0].number, true);
   }
 
 }
 
 var styles = StyleSheet.create({
+  navigator: {
+    flex: 1,
+    //backgroundColor: '#F6F6EF',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#F6F6EF',
-    flexDirection: 'column'
+    //backgroundColor: '#F6F6EF',
   },
   rowContainer: {
     flex: 1,

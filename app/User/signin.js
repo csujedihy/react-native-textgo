@@ -75,8 +75,8 @@ export default class SignIn extends Component {
               }
             }
           }
-          configureScene={this.configureScene}
-          renderScene={this.renderScene}
+          configureScene={this.configureScene.bind(this)}
+          renderScene={this.renderScene.bind(this)}
           />
       </Modal>
     );
