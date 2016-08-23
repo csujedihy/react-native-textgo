@@ -2,14 +2,8 @@
 
 import React, { Component } from 'react';
 import MyNavigationBar from '../Components/MyNavigationBar';
-import Users from '../Model/users';
-import {bindActionCreators} from 'redux';
-import { connect } from 'react-redux';
-import * as userActions from '../actions/userActions';
 import TabBar from '../Components/TabBar';
 import Contacts from 'react-native-contacts';
-import Communications from 'react-native-communications';
-import ContactCard from './ContactCard';
 import MainView from './MainView';
 
 import {
@@ -51,39 +45,35 @@ class Main extends Component {
   }
     
   genRows(){
+    console.log("main.js: genRows() called")
     Contacts.checkPermission( (err, permission) => {
       console.log("current permission: " + permission);
-      if(permission === 'undefined' || permission === 'denied'){
-        alert("Contacts not authorized! Please go to 'Settings'->'Privacy'->'Contacts' and grant permission.");
+      if(permission === 'undefined'){
         Contacts.requestPermission( (err, permission) => {
           console.log("current permission: " + permission);
-          console.log("require permission succeed");
         })
+      }else if(permission === 'denied'){
+        alert("Contacts not authorized! " + 
+        "Please go to 'Settings'->'Privacy'->'Contacts' and grant permission.");
+      }else{
+        console.log("start to get contacts.")
+        Contacts.getAll((err, contacts) => {
+          console.log("contact callback get called.")
+          if(err && err.type === 'permissionDenied'){
+            console.log("permissionDenied");
+            this.setState({dataSource: ds.cloneWithRows([])});
+            //return [];
+          } else {
+            console.log("permissionGranted");
+            console.log("contacts: ", contacts);
+            this.setState({dataSource: ds.cloneWithRows(contacts), testData: 1});
+            console.log("main.js: this.setState() get called")
+            //this.setState({dataSource: ds.cloneWithRows([])});
+            //return contacts;
+          }
+        });
       }
     })
-
-    console.log("start to get contacts.")
-    Contacts.getAll((err, contacts) => {
-      console.log("contact callback get called.")
-      if(err && err.type === 'permissionDenied'){
-        console.log("permissionDenied");
-        this.setState({dataSource: ds.cloneWithRows([])});
-        //return [];
-      } else {
-        console.log("permissionGranted");
-        console.log("contacts: ", contacts);
-        this.setState({dataSource: ds.cloneWithRows(contacts), testData: 1});
-        console.log("main.js: this.setState() get called")
-        //this.setState({dataSource: ds.cloneWithRows([])});
-        //return contacts;
-      }
-    });
-  }
-
-  rightButtonHandler() {
-    const {state, actions} = this.props;
-    const {signOutAsync} = actions;
-    signOutAsync();
   }
 
   configureScene(route, routeStack) {
@@ -108,10 +98,6 @@ class Main extends Component {
 
   render() {
     console.log("main.js: start render/re-render")
-    const rightButtonConfig = {
-      title: 'SIGN OUT',
-      handler: this.rightButtonHandler.bind(this)
-    };
 
     const titleConfig = {
       title: 'TXTGO',
@@ -184,10 +170,4 @@ var styles = StyleSheet.create({
 });
 
 
-export default connect(state => ({
-    state: state.user
-  }),
-  (dispatch) => ({
-    actions: bindActionCreators(userActions, dispatch)
-  })
-)(Main);
+export default Main;

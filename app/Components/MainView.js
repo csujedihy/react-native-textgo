@@ -5,6 +5,12 @@ import Communications from 'react-native-communications';
 import TabBar from '../Components/TabBar';
 import ContactCard from './ContactCard';
 import MyNavigationBar from './MyNavigationBar';
+import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import * as userActions from '../actions/userActions';
+import Record from './Record';
+
+import SearchBar from 'react-native-search-bar';
 
 import {
   View,
@@ -25,9 +31,20 @@ class MainView extends Component{
     console.log("MainView componentDidMount.");
   }
 
+  rightButtonHandler() {
+    const {state, actions} = this.props;
+    const {signOutAsync} = actions;
+    signOutAsync();
+  }
+
   render(){
     const titleConfig = {
       title: 'Contacts',
+    };
+  
+    const rightButtonConfig = {
+      title: 'SIGN OUT',
+      handler: this.rightButtonHandler.bind(this)
     };
 
     console.log("MainView render/re-render.: " + this.props.testData);
@@ -36,39 +53,61 @@ class MainView extends Component{
       <View style={styles.container}>
         <MyNavigationBar
           title={titleConfig}
+          rightButton={rightButtonConfig}
         />
-        <TabBar structure={[{
-          title: 'Contacts',
-          iconName: 'user',
-          renderContent: () => {
-            console.log("DataSource: " + (this.props.dataSource._dataBlob.s1.length? this.props.dataSource._dataBlob.s1[0].emailAddresses[0].email : "0"));
-            return (
-              <ListView
-                enableEmptySections={true}
-                dataSource={this.props.dataSource}
-                renderRow={(row) => this.renderListViewRow.bind(this)(row, 'Contacts')}
-              />
-            );
-          }
-        },
-          {
-            title: 'Keypad',
-            iconName: 'phone',
-            renderContent: () => {
-              return (
-                <ListView
-                  enableEmptySections={true}
-                  dataSource={this.props.dataSource}
-                  renderRow={(row) => this.renderListViewRow.bind(this)(row, 'Keypad') }
-                />
-              );
+        <TabBar structure={[
+            {
+              title: 'Contacts',
+              iconName: 'user',
+              renderContent: () => {
+                console.log("DataSource: " + (this.props.dataSource._dataBlob.s1.length? this.props.dataSource._dataBlob.s1[0].emailAddresses[0].email : "0"));
+                return (
+                  <View>
+                    {/*
+                    <SearchBar
+                      //ref='searchBar'
+                      placeholder='Search'
+                      //onChangeText={()=>console.log("")}
+                      //onSearchButtonPress={()=>console.log("")}
+                      //onCancelButtonPress={()=>console.log("")}
+                    />
+                    */}
+                    <ListView
+                      enableEmptySections={true}
+                      dataSource={this.props.dataSource}
+                      renderRow={(row) => this.renderListViewRow.bind(this)(row, 'Contacts')}
+                    />
+                  </View>
+                );
+              }
+            },
+            {
+              title: 'Record',
+              iconName: 'phone',
+              renderContent: () => {
+                return (
+                  <Record/>
+                );
+              }
+            },
+            {
+              title: 'Keypad',
+              iconName: 'phone',
+              renderContent: () => {
+                return (
+                  <ListView
+                    enableEmptySections={true}
+                    dataSource={this.props.dataSource}
+                    renderRow={(row) => this.renderListViewRow.bind(this)(row, 'Keypad') }
+                  />
+                );
+              }
             }
-          }
-        ]}
-        selectedTab={0}
-        activeTintColor={'#ff8533'}
-        iconSize={25}
-      />
+          ]}
+          selectedTab={0}
+          activeTintColor={'#ff8533'}
+          iconSize={25}
+        />
       </View>
     );
   }
@@ -157,4 +196,10 @@ var styles = StyleSheet.create({
   }
 });
 
-export default MainView;
+export default connect(state => ({
+    state: state.user
+  }),
+  (dispatch) => ({
+    actions: bindActionCreators(userActions, dispatch)
+  })
+)(MainView);
