@@ -3,20 +3,26 @@
 import React, { Component } from 'react';
 import Communications from 'react-native-communications';
 import MyNavigationBar from './MyNavigationBar';
+import Record from './Record';
 
 import {
   StyleSheet,
   TouchableHighlight,
   Navigator,
   View,
-  Text
+  Text,
+  Modal
 } from 'react-native';
 
 
 class ContactCard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      modalVisible: false,
+    }
   }
+  
 
 leftButtonHandler(){
   this.props.navigator.pop();
@@ -42,7 +48,8 @@ leftButtonHandler(){
           leftButton={leftButtonConfig}
         />
         <TouchableHighlight underlayColor={'#f3f3f2'}
-          onPress={() => Communications.phonecall(row.phoneNumbers[0].number, true) }>
+          //onPress={() => Communications.phonecall(row.phoneNumbers[0].number, true) }>
+        >
           <View style={styles.rowContainer}>
             <View style={styles.rowDetailsContainer}>
               <Text style={styles.rowDetailsLine}>
@@ -61,6 +68,19 @@ leftButtonHandler(){
             </View>
           </View>
         </TouchableHighlight>
+        <TouchableHighlight style={styles.roundButton}
+          onPress={() => this.setState({modalVisible: true})}>
+          <Text></Text>
+        </TouchableHighlight>
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => { alert("Modal has been closed.") } }>
+          <Record
+            onClose={() => this.setState({modalVisible: false})}
+          />       
+        </Modal>
       </View>
     );
   }
@@ -104,6 +124,11 @@ var styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: '#CCCCCC'
+  },
+  roundButton:{
+    height:128,
+    width: 128,
+    borderRadius: 64
   }
 });
 

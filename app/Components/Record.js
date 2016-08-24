@@ -1,7 +1,8 @@
 'use strict';
 
 import React, {Component} from 'react';
-var RNUploader = require('NativeModules').RNUploader;
+import {RNUploader} from 'NativeModules';
+import MyNavigationBar from './MyNavigationBar';
 
 import {
   AppRegistry,
@@ -32,7 +33,7 @@ class Record extends Component {
     let audioPath = AudioUtils.DocumentDirectoryPath + '/test.aac';
 
     AudioRecorder.prepareRecordingAtPath(audioPath, {
-      SampleRate: 22050,
+      SampleRate: 44100,
       Channels: 1,
       AudioQuality: "High",
       AudioEncoding: "aac"
@@ -69,7 +70,7 @@ class Record extends Component {
     ];
 
     let opts = {
-        url: 'http://localhost:5000/upload',
+        url: 'http://50.24.35.236:5000/upload',
         files: files, 
         method: 'POST',                             // optional: POST or PUT
         //headers: { 'Accept': 'application/json' },  // optional
@@ -127,7 +128,7 @@ class Record extends Component {
     this.setState({recording: true, playing: false});
   }
 
- _play() {
+  _play() {
     if (this.state.recording) {
       this._stop();
       this.setState({recording: false});
@@ -135,11 +136,27 @@ class Record extends Component {
     AudioRecorder.playRecording(); 
     this.setState({playing: true});
   }
+ 
+  rightButtonHandler(){
+    this.props.onClose();
+  }
 
   render() {
+    const titleConfig = {
+      title: 'Contacts',
+    };
 
+    const rightButtonConfig = {
+      title: 'CLOSE',
+      handler: this.rightButtonHandler.bind(this)
+    };
+    
     return (
       <View style={styles.container}>
+        <MyNavigationBar
+          titletitle={titleConfig}
+          rightButton={rightButtonConfig}
+        />
         <View style={styles.controls}>
           {this._renderButton("RECORD", () => {this._record()}, this.state.recording )}
           {this._renderButton("STOP", () => {this._stop()} )}

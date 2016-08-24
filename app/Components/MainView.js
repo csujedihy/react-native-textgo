@@ -8,9 +8,8 @@ import MyNavigationBar from './MyNavigationBar';
 import {bindActionCreators} from 'redux';
 import { connect } from 'react-redux';
 import * as userActions from '../actions/userActions';
-import Record from './Record';
 
-import SearchBar from 'react-native-search-bar';
+
 
 import {
   View,
@@ -62,31 +61,11 @@ class MainView extends Component{
               renderContent: () => {
                 console.log("DataSource: " + (this.props.dataSource._dataBlob.s1.length? this.props.dataSource._dataBlob.s1[0].emailAddresses[0].email : "0"));
                 return (
-                  <View>
-                    {/*
-                    <SearchBar
-                      //ref='searchBar'
-                      placeholder='Search'
-                      //onChangeText={()=>console.log("")}
-                      //onSearchButtonPress={()=>console.log("")}
-                      //onCancelButtonPress={()=>console.log("")}
-                    />
-                    */}
                     <ListView
                       enableEmptySections={true}
                       dataSource={this.props.dataSource}
                       renderRow={(row) => this.renderListViewRow.bind(this)(row, 'Contacts')}
                     />
-                  </View>
-                );
-              }
-            },
-            {
-              title: 'Record',
-              iconName: 'phone',
-              renderContent: () => {
-                return (
-                  <Record/>
                 );
               }
             },
