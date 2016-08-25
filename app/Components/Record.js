@@ -10,7 +10,8 @@ import {
   Text,
   View,
   TouchableHighlight,
-  DeviceEventEmitter
+  DeviceEventEmitter,
+  DatePickerIOS,
 } from 'react-native';
 
 import {AudioRecorder, AudioUtils} from 'react-native-audio';
@@ -24,7 +25,9 @@ class Record extends Component {
       stoppedRecording: false,
       stoppedPlaying: false,
       playing: false,
-      finished: false
+      finished: false,
+      date: new Date(),
+      timeZoneOffsetInHours: (-1) * (new Date()).getTimezoneOffset() / 60,
     };
   }
   
@@ -70,12 +73,14 @@ class Record extends Component {
     ];
 
     let opts = {
-        url: 'http://50.24.35.236:5000/upload',
+        url: 'http://50.24.35.236:5001/upload',
         files: files, 
         method: 'POST',                             // optional: POST or PUT
         //headers: { 'Accept': 'application/json' },  // optional
-        //params: { 'user_id': 1 },                   // optional
+        params: { 'date': this.state.date},                   // optional
     };
+
+    console.log('delayedDate: ' + opts.params.date);
 
     RNUploader.upload( opts, (err, response) => {
         if( err ){
@@ -165,6 +170,13 @@ class Record extends Component {
           {this._renderButton("UPLOAD", () => {this._doUpload()} )}
           <Text style={styles.progressText}>{this.state.currentTime}s</Text>
         </View>
+        <DatePickerIOS
+          date={this.state.date}
+          mode="datetime"
+          //timeZoneOffsetInHours only changes time displayed. It will not modify 'date'
+          timeZoneOffsetInMinutes={this.state.timeZoneOffsetInHours * 60}
+          onDateChange={(date) => {console.log(date);this.setState({date: date})}}
+        />
       </View>
     );
   }

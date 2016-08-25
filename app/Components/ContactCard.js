@@ -11,7 +11,7 @@ import {
   Navigator,
   View,
   Text,
-  Modal
+  Modal,
 } from 'react-native';
 
 
